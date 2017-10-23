@@ -14,7 +14,7 @@ while True:
 
     # detect MultiScale / faces 
     faces = classifier.detectMultiScale(mini)
-    #image = 1
+
     # Draw rectangles around each face
     for f in faces:
         (x, y, w, h) = [v * size for v in f] #Scale the shapesize backup
@@ -23,7 +23,6 @@ while True:
         sub_face = im[y:y+h, x:x+w]
         FaceFileName = "att_faces/Harshil/Image_" + str(y) + ".jpg"
         cv2.imwrite(FaceFileName, sub_face)
-        #image= image + 1
 
     # Show the image
     cv2.imshow('Training Set Generator',   im)
