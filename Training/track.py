@@ -4,8 +4,7 @@ import _thread
 from cv2 import face
 
 labl = []
-size = 4
-#fn_haar = 'haarcascade_frontalface_default.xml'
+size = 5
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 fn_dir = '/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Training/att_faces'
 flag =0
@@ -41,11 +40,11 @@ start  = time.time()
 while True:
     (rval, frame) = webcam.read()
     frame=cv2.flip(frame,1,0)
-    cv2.imshow(frame)
+    #cv2.imshow(frame)
     if (flag%10==0):
         labl = []
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        mini = cv2.resize(gray, (int(gray.shape[1] / size), int(gray.shape[0] / size))
+        mini = cv2.resize(gray, (int(gray.shape[1] / size), int(gray.shape[0] / size)))
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
         for (x,y,w,h) in faces:
             face = gray[y:y + h, x:x + w]
@@ -64,3 +63,47 @@ while True:
             else:
                 cv2.putText(frame,'Unknown',(x-10, y-10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 0))
                 labl.append(names[prediction[0]])
+    else:
+        for i in range(len(faces)):
+            face_i = faces[i]
+            #r,h,c,w = 250,90,400,125  # simply hardcoded the values
+            (x, y, w, h) = [v * size for v in face_i]
+            track_window = (x,y,w,h)
+    
+        # set up the ROI for tracking
+            roi = frame[y:y+h, x:x+w]
+            hsv_roi =  cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
+            lower_skin = numpy.array([189,224,255], dtype = "uint8")
+            upper_skin = numpy.array([134,192,234], dtype = "uint8")
+            mask = cv2.inRange(hsv_roi,lower_skin,upper_skin)
+            roi_hist = cv2.calcHist([hsv_roi],[0],mask,[180],[0,180])
+            cv2.normalize(roi_hist,roi_hist,0,255,cv2.NORM_MINMAX)
+
+        # Setup the termination criteria, either 10 iteration or move by atleast 1 pt
+            term_crit = ( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1 )
+            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+            dst = cv2.calcBackProject([hsv],[0],roi_hist,[0,180],1)
+    
+        # apply meanshift to get the new location
+            ret, track_window = cv2.CamShift(dst, track_window, term_crit)
+    
+        # Draw it on image
+            x,y,w,h = track_window
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
+            cv2.putText(frame, labl[i], (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,2,(255,255,255))  
+
+    cv2.imshow('Test',   frame)
+    flag = flag + 1
+    key = cv2.waitKey(10)
+    # if Esc key is press then break out of the loop 
+    if key == 27: #The Esc key
+        break
+
+end = time.time()
+seconds = end - start
+print ("Time taken : {0} seconds".format(seconds))
+print (flag)
+ 
+# Calculate frames per second
+fps  = flag / seconds
+print ("Estimated frames per second : {0}".format(fps))
