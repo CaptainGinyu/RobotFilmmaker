@@ -44,6 +44,7 @@ while True:
     if (flag%10==0):
         labl = []
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        #gray = cv2.resize(gray,im_height,im_width)
         mini = cv2.resize(gray, (int(gray.shape[1] / size), int(gray.shape[0] / size)))
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
         for (x,y,w,h) in faces:
@@ -66,16 +67,27 @@ while True:
     else:
         for i in range(len(faces)):
             face_i = faces[i]
-            #r,h,c,w = 250,90,400,125  # simply hardcoded the values
-            (x, y, w, h) = [v * size for v in face_i]
+            #x,h,y,w = 250,90,400,125  # simply hardcoded the values
+            #(x, y, w, h) = [v * size for v in face_i]
             track_window = (x,y,w,h)
     
         # set up the ROI for tracking
             roi = frame[y:y+h, x:x+w]
             hsv_roi =  cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
-            lower_skin = numpy.array([189,224,255], dtype = "uint8")
-            upper_skin = numpy.array([134,192,234], dtype = "uint8")
+            #print (hsv_roi.shape)
+            #low= numpy.uint8([[[189,224,255]]])
+            #high = numpy.uint8([[[134,192,234]]])
+            #lower_skin = cv2.cvtColor(low ,cv2.COLOR_BGR2HSV)
+            #upper_skin = cv2.cvtColor(high,cv2.COLOR_BGR2HSV)
+            lower_skin = numpy.array((0, 48, 80))
+            upper_skin = numpy.array((20, 255, 255))
+            #lower_skin = numpy.array([0, 48, 80], dtype = "uint8")#((32,25.9,100)) #, dtype = "uint8"
+            #upper_skin = numpy.array([20, 255, 255], dtype = "uint8") #((35,42.7,91.9))
             mask = cv2.inRange(hsv_roi,lower_skin,upper_skin)
+            #mask = cv2.inRange(hsv_roi,numpy.array((0., 60.,32.)), numpy.array((180.,255.,255.)))
+            #lower = np.array([0, 48, 80], dtype = "uint8")
+            #upper = np.array([20, 255, 255], dtype = "uint8")
+            #mask = cv2.inRange(hsv_roi,cv2.cvtColor(lower_skin, cv2.COLOR_BGR2HSV),cv2.cvtColor(upper_skin,cv2.COLOR_BGR2HSV))
             roi_hist = cv2.calcHist([hsv_roi],[0],mask,[180],[0,180])
             cv2.normalize(roi_hist,roi_hist,0,255,cv2.NORM_MINMAX)
 
@@ -85,7 +97,7 @@ while True:
             dst = cv2.calcBackProject([hsv],[0],roi_hist,[0,180],1)
     
         # apply meanshift to get the new location
-            ret, track_window = cv2.CamShift(dst, track_window, term_crit)
+            ret, track_window = cv2.meanShift(dst, track_window, term_crit)
     
         # Draw it on image
             x,y,w,h = track_window
