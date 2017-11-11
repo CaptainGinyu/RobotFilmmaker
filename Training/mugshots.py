@@ -1,6 +1,20 @@
 import cv2
+import sys
+import os
+
+if len(sys.argv) != 2:
+    print('Please provide ONE name as an argument')
+    sys.exit()
+
 size = 4
 webcam = cv2.VideoCapture(0) #Use camera 0
+
+subject = sys.argv[1]
+
+folder = 'att_faces/' + subject
+
+if not os.path.exists(folder):
+    os.makedirs(folder)
 
 # We load the xml file
 classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
@@ -18,11 +32,13 @@ while True:
     # Draw rectangles around each face
     for f in faces:
         (x, y, w, h) = [v * size for v in f] #Scale the shapesize backup
-        cv2.rectangle(im, (x, y), (x + w, y + h),(0,255,0),thickness=4)
+        
         #Save just the rectangle faces in SubRecFaces
         sub_face = im[y:y+h, x:x+w]
-        FaceFileName = "att_faces/Harshil/Image_" + str(y) + ".jpg"
+        FaceFileName = folder + '/Image_' + str(y) + '.jpg'
         cv2.imwrite(FaceFileName, sub_face)
+
+        cv2.rectangle(im, (x, y), (x + w, y + h),(0,255,0),thickness=4)
 
     # Show the image
     cv2.imshow('Training Set Generator',   im)
@@ -30,3 +46,6 @@ while True:
     # if Esc key is press then break out of the loop 
     if key == 27: #The Esc key
         break
+
+cv2.destroyAllWindows()
+webcam.release()
