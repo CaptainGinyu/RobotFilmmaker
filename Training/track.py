@@ -33,7 +33,8 @@ for (subdirs, dirs, files) in os.walk(fn_dir):
 (images, lables) = [numpy.array(lis) for lis in [images, lables]]
 
 model = face.FisherFaceRecognizer_create()
-
+fourcc = cv2.VideoWriter_fourcc(*'MP42')
+out = cv2.VideoWriter('output.mp4',fourcc, 20.0, (1280 ,720))
 model.train(images, lables)
 webcam = cv2.VideoCapture(0)
 start  = time.time()
@@ -67,27 +68,14 @@ while True:
     else:
         for i in range(len(faces)):
             face_i = faces[i]
-            #x,h,y,w = 250,90,400,125  # simply hardcoded the values
-            #(x, y, w, h) = [v * size for v in face_i]
             track_window = (x,y,w,h)
     
         # set up the ROI for tracking
             roi = frame[y:y+h, x:x+w]
             hsv_roi =  cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
-            #print (hsv_roi.shape)
-            #low= numpy.uint8([[[189,224,255]]])
-            #high = numpy.uint8([[[134,192,234]]])
-            #lower_skin = cv2.cvtColor(low ,cv2.COLOR_BGR2HSV)
-            #upper_skin = cv2.cvtColor(high,cv2.COLOR_BGR2HSV)
             lower_skin = numpy.array((0, 48, 80))
             upper_skin = numpy.array((20, 255, 255))
-            #lower_skin = numpy.array([0, 48, 80], dtype = "uint8")#((32,25.9,100)) #, dtype = "uint8"
-            #upper_skin = numpy.array([20, 255, 255], dtype = "uint8") #((35,42.7,91.9))
             mask = cv2.inRange(hsv_roi,lower_skin,upper_skin)
-            #mask = cv2.inRange(hsv_roi,numpy.array((0., 60.,32.)), numpy.array((180.,255.,255.)))
-            #lower = np.array([0, 48, 80], dtype = "uint8")
-            #upper = np.array([20, 255, 255], dtype = "uint8")
-            #mask = cv2.inRange(hsv_roi,cv2.cvtColor(lower_skin, cv2.COLOR_BGR2HSV),cv2.cvtColor(upper_skin,cv2.COLOR_BGR2HSV))
             roi_hist = cv2.calcHist([hsv_roi],[0],mask,[180],[0,180])
             cv2.normalize(roi_hist,roi_hist,0,255,cv2.NORM_MINMAX)
 
@@ -105,6 +93,7 @@ while True:
             cv2.putText(frame, labl[i], (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,2,(255,255,255))  
 
     cv2.imshow('Test',   frame)
+    out.write(frame)
     flag = flag + 1
     key = cv2.waitKey(10)
     # if Esc key is press then break out of the loop 
