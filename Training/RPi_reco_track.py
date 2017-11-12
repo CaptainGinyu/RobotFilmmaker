@@ -80,7 +80,6 @@ while True:
             movement = desired_center - center
             (dirX, dirY) = ("", "")
             # ensure there is significant movement in the
-			# x-direction
             if numpy.abs(movement[0]) > 20:
                 if movement[0] > 0:
                     dirX = "East" 
@@ -91,8 +90,6 @@ while True:
                     dirY = "North" 
                 else:
                     dirY = "South"
-			# ensure there is significant movement in the
-			# y-direction
 
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
             cv2.putText(frame, "{},{}".format(dirX,dirY), (10, 30), cv2.FONT_HERSHEY_SIMPLEX,0.65, (0, 0, 255), 3)

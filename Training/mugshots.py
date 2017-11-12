@@ -9,6 +9,7 @@ if len(sys.argv) != 2:
 size = 4
 webcam = cv2.VideoCapture(0) #Use camera 0
 count = []
+add=0
 subject = sys.argv[1]
 
 folder = '../' + subject
@@ -34,19 +35,22 @@ while True:
         
         #Save just the rectangle faces in SubRecFaces
         sub_face = im[y:y+h, x:x+w]
-        FaceFileName = folder + '/Image_' + str(y) + '.jpg'
-        cv2.imwrite(FaceFileName, sub_face)
         if str(y) not in count: 
             count.append(str(y))
+            add= add+1
+
+        FaceFileName = folder + '/Image_' + str(add)+ '.jpg'
+        cv2.imwrite(FaceFileName, sub_face)
+        # if str(y) not in count: 
+        #     count.append(str(y))
 
         cv2.rectangle(im, (x, y), (x + w, y + h),(0,255,0),thickness=4)
 
     # Show the image
     cv2.imshow('Training Set Generator',   im)
     key = cv2.waitKey(10)
-    print(len(count))
     # if Esc key is press then break out of the loop 
-    if key == 27 or len(count) > 19: #The Esc key or samples more than 20
+    if key == 27 or len(count) > 34: #The Esc key or samples more than 20
         break
 
 cv2.destroyAllWindows()
