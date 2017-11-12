@@ -1,6 +1,6 @@
 import cv2, sys, numpy, os
 import time
-import _thread
+#import _thread
 from cv2 import face
 # import pickle
 
@@ -35,7 +35,7 @@ for (subdirs, dirs, files) in os.walk(fn_dir):
 
 model = face.FisherFaceRecognizer_create()
 #model = face.LBPHFaceRecognizer_create()
-# fourcc = cv2.VideoWriter_fourcc(*'MP42')
+# fourcc = cv2.VideoWriter_fourcc(*'MP42') 
 # out = cv2.VideoWriter('output.mp4',fourcc, 20.0, (1280 ,720))
 model.train(images, lables)
 model.write('trained.xml')
