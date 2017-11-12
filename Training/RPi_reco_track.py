@@ -4,17 +4,17 @@ import _thread
 from cv2 import face
 
 # import pickle
-model = face.FisherFaceRecognizer_create()
+model = face.createFisherFaceRecognizer()
 #model = face.LBPHFaceRecognizer_create()
-fn_dir = '/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Training/att_faces'
-(images, lables, names, id) = ([], [], {}, 0)
+#fn_dir = '/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Training/att_faces'
+#(images, lables, names, id) = ([], [], {}, 0)
 #fourcc = cv2.VideoWriter_fourcc(*'MP42')
-for (subdirs, dirs, files) in os.walk(fn_dir):
-    for subdir in dirs:
-        names[id] = subdir
-        id += 1
+#for (subdirs, dirs, files) in os.walk(fn_dir):
+#    for subdir in dirs:
+#        names[id] = subdir
+#        id += 1
 #out = cv2.VideoWriter('output.mp4',fourcc, 20.0, (1280 ,720))
-model.read('trained.xml')
+model.load('../Cloud/XML/trained.xml')
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 flag =0
 size = 5
@@ -44,11 +44,11 @@ while True:
 
         # Write the name of recognized face
             if prediction[1]<3000:
-                cv2.putText(frame,'%s - %.0f' % (names[prediction[0]],prediction[1]),(x-10, y-10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 0))
-                labl.append(names[prediction[0]])
+                cv2.putText(frame,'%s - %.0f' % ('Target',prediction[1]),(x-10, y-10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 0))
+                labl.append('Target')
             else:
                 cv2.putText(frame,'Unknown',(x-10, y-10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 0))
-                labl.append(names[prediction[0]])
+                labl.append('Unknown')
     else:
         for i in range(len(faces)):
             face_i = faces[i]
