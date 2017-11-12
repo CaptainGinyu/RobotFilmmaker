@@ -27,7 +27,8 @@ if __name__ == '__main__':
     ssm_client = boto3.client(
         'ssm',
         aws_access_key_id = creds[0],
-        aws_secret_access_key = creds[1]
+        aws_secret_access_key = creds[1],
+        region_name = 'us-east-1'
     )
 
     ##########################################
@@ -42,4 +43,4 @@ if __name__ == '__main__':
         InstanceIds=instance_ids
     )
 
-    print(response)
+    print('Successful xml file creation')

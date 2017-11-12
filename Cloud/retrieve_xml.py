@@ -1,17 +1,18 @@
-# Uploads mugshots to bucket
-
 import boto3
 import botocore
-import os.path
+import os
+import sys
 
 if __name__ == '__main__':
     ##########################################
     #CREDENTIALS AND RESOURCE OPENING
     ##########################################
-    #Get credentials:
-    #adminuser.txt has two lines: first line is access key, seconds line is secret key
+    #Get credentials
+    # adminuser has two lines: first line is access key, seconds line is secret key
     AWS_CREDS = 'adminuser.txt'
-    AWS_BUCKET_UPLOAD = 'robotfilmmaker-mugshots'
+    AWS_BUCKET_UPLOAD = 'robotfilmmaker-signals'
+    AWS_BUCKET_DOWNLOAD = 'robotfilmmaker-models'
+    AWS_KEY = 'trained.xml'
 
     try:
         file = open(AWS_CREDS,'r')
@@ -35,9 +36,16 @@ if __name__ == '__main__':
         aws_secret_access_key = creds[1]
     )
 
-    ##########################################
-    #BULK UPLOAD: Upload images
-    ##########################################
-    for root,dirs,files in os.walk('./Target'):
-        for myfile in files:
-            s3.meta.client.upload_file(os.path.join(root,myfile),AWS_BUCKET_UPLOAD,os.path.join('Target/',myfile))
+    bucket_dl = s3.Bucket(AWS_BUCKET_DOWNLOAD)
+
+    try:
+        path = os.curdir + "/XML"
+        if not os.path.exists(path):
+            os.makedirs(path)
+        bucket_dl.download_file(AWS_KEY, path + "/trained.xml")
+
+    except botocore.exceptions.ClientError as e:
+        if e.response['Error']['Code'] == "404":
+            print("The object does not exist.")
+        else:
+            raise

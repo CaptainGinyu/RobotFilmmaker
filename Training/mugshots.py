@@ -11,7 +11,7 @@ webcam = cv2.VideoCapture(0) #Use camera 0
 count = []
 subject = sys.argv[1]
 
-folder = 'att_faces/' + subject
+folder = '../' + subject
 
 if not os.path.exists(folder):
     os.makedirs(folder)
