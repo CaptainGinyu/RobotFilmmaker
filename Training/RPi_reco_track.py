@@ -5,6 +5,7 @@ from cv2 import face
 
 # import pickle
 model = face.createFisherFaceRecognizer()
+names = ['Target', 'Unknown']
 #model = face.LBPHFaceRecognizer_create()
 #fn_dir = '/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Training/att_faces'
 #(images, lables, names, id) = ([], [], {}, 0)
@@ -43,12 +44,13 @@ while True:
             print (prediction[1])
 
         # Write the name of recognized face
+            name = names[prediction[0]]
             if prediction[1]<3000:
-                cv2.putText(frame,'%s - %.0f' % ('Target',prediction[1]),(x-10, y-10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 0))
-                labl.append('Target')
+                cv2.putText(frame,'%s - %.0f' % (name,prediction[1]),(x-10, y-10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 0))
+                labl.append(name)
             else:
-                cv2.putText(frame,'Unknown',(x-10, y-10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 0))
-                labl.append('Unknown')
+                cv2.putText(frame, name,(x-10, y-10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 0))
+                labl.append(name)
     else:
         for i in range(len(faces)):
             face_i = faces[i]

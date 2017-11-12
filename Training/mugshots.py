@@ -46,7 +46,7 @@ while True:
     key = cv2.waitKey(10)
     print(len(count))
     # if Esc key is press then break out of the loop 
-    if key == 27 or len(count) > 19: #The Esc key or samples more than 20
+    if key == 27 or len(count) > 34: #The Esc key or samples more than 20
         break
 
 cv2.destroyAllWindows()
