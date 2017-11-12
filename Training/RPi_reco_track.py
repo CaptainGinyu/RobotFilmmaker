@@ -2,6 +2,7 @@ import cv2, sys, numpy, os
 import time
 import _thread
 from cv2 import face
+from numpy import interp
 
 # import pickle
 model = face.createFisherFaceRecognizer()
@@ -25,6 +26,8 @@ webcam = cv2.VideoCapture(0)
 start  = time.time()
 while True:
     (rval, frame) = webcam.read()
+    height, width = frame.shape[:2]
+    desired_center =numpy.array([width/2,height/2])
     frame=cv2.flip(frame,1,0)
     #cv2.imshow(frame)
     if (flag%10==0):
@@ -72,11 +75,29 @@ while True:
     
         # apply meanshift to get the new location
             ret, track_window = cv2.meanShift(dst, track_window, term_crit)
-    
+
         # Draw it on image
             x,y,w,h = track_window
+            center=numpy.array([x+(w/2), y+(h/2)])
+            movement = desired_center - center
+            (dirX, dirY) = ("", "")
+            # ensure there is significant movement in the
+            if numpy.abs(movement[0]) > 20:
+                if movement[0] > 0:
+                    dirX = "East" 
+                else:
+                    dirX = "West"
+            if numpy.abs(movement[1]) > 20:
+                if movement[1] > 0:
+                    dirY = "North" 
+                else:
+                    dirY = "South"
+
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
+            cv2.putText(frame, "{},{}".format(dirX,dirY), (10, 30), cv2.FONT_HERSHEY_SIMPLEX,0.65, (0, 0, 255), 3)
+            cv2.putText(frame, "dx: {}, dy: {}".format(movement[0], movement[1]),(10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.35, (0, 0, 255), 1)
             cv2.putText(frame, labl[i], (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,2,(255,255,255))  
+    
 
     cv2.imshow('Test',   frame)
     #out.write(frame)
