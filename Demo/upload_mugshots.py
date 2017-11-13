@@ -36,6 +36,14 @@ if __name__ == '__main__':
     )
 
     ##########################################
+    #EMPTY TARGET FOLDER: Empty target folder
+    ##########################################
+    bucket_mugshots = s3.Bucket(AWS_BUCKET_UPLOAD)
+
+    for myfile in bucket_mugshots.objects.filter(Prefix='Target/'):
+        myfile.delete()
+
+    ##########################################
     #BULK UPLOAD: Upload images
     ##########################################
     for root,dirs,files in os.walk('./Target'):

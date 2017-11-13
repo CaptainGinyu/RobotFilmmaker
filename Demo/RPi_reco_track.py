@@ -2,11 +2,6 @@ import cv2, sys, numpy, os
 import time
 from cv2 import face
 from numpy import interp
-import serial
-
-#serial import
-arduinoSerial = serial.Serial('COM3', 9600)
-
 
 # import pickle
 model = face.FisherFaceRecognizer_create()
@@ -89,25 +84,13 @@ while True:
             # ensure there is significant movement in the
             if numpy.abs(movement[0]) > 20:
                 if movement[0] > 0:
-                    #dirX = "East"
-                    #dirX = 50
-                    #arduinoSerial.write(bytes("30,30", 'UTF-8'))
                     print("EAST")
                 else:
-                    #dirX = "West"
-                    #dirX = 50
-                    #arduinoSerial.write(bytes("30,30", 'UTF-8'))
                     print("WEST")
             if numpy.abs(movement[1]) > 20:
                 if movement[1] > 0:
-                    #dirY = "North"
-                    #dirY = 75
-                    arduinoSerial.write(bytes("-5,-5", 'UTF-8'))
                     print("NORTH")
                 else:
-                    #dirY = "South"
-                    #dirY = 75
-                    arduinoSerial.write(bytes("5,5", 'UTF-8'))
                     print("SOUTH")
 
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)

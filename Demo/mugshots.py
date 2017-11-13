@@ -8,7 +8,7 @@ import os, time
 #     sys.exit()
 
 size = 4
-webcam = cv2.VideoCapture(1)  # Use camera 0
+webcam = cv2.VideoCapture(0)  # Use camera 0
 count = []
 add = 0
 # subject = sys.argv[1]
@@ -20,7 +20,7 @@ if not os.path.exists(folder):
     os.makedirs(folder)
 
 # We load the xml file
-classifier = cv2.CascadeClassifier('C:\Users\Philip\PycharmProjects\RobotFilmmaker\haarcascade_frontalface_default.xml')
+classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 while True:
     (rval, im) = webcam.read()
@@ -28,7 +28,7 @@ while True:
     # Resize the image to speed up detection
     mini = cv2.resize(im, (int(im.shape[1] / size), int(im.shape[0] / size)))
 
-    # detect MultiScale / faces 
+    # detect MultiScale / faces
     faces = classifier.detectMultiScale(mini)
 
     # Draw rectangles around each face
@@ -41,9 +41,10 @@ while True:
             count.append(str(y))
             add = add + 1
 
+        print(add)
         FaceFileName = folder + '/Image_' + str(add) + '.jpg'
         cv2.imwrite(FaceFileName, sub_face)
-        # if str(y) not in count: 
+        # if str(y) not in count:
         #     count.append(str(y))
 
         cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0), thickness=4)
@@ -51,8 +52,8 @@ while True:
     # Show the image
     cv2.imshow('Training Set Generator', im)
     key = cv2.waitKey(10)
-    # if Esc key is press then break out of the loop 
-    if key == 27 or len(count) > 19:  # The Esc key or samples more than 20
+    # if Esc key is press then break out of the loop
+    if key == 27 or len(count) > 24:  # The Esc key or samples more than 20
         break
 
 cv2.destroyAllWindows()

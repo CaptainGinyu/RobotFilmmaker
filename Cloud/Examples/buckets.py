@@ -72,6 +72,7 @@ if __name__ == '__main__':
             raise
 
     raw_input('Finished downloading xml, press enter to continue')
+
     ##########################################
     #EMPTY BUCKET: Empty entire bucket
     ##########################################
@@ -81,3 +82,11 @@ if __name__ == '__main__':
         myfile.delete()
 
     raw_input('Finished deleting bucket, press enter to continue')
+
+    ##########################################
+    #EMPTY FOLDER: Empty specific folder of bucket
+    ##########################################
+    bucket_empty = s3.Bucket(AWS_BUCKET_UPLOAD)
+
+    for myfile in bucket_empty.objects.filter(Prefix='Target/'):
+        myfile.delete()
