@@ -2,20 +2,19 @@ import cv2, sys, numpy, os
 import time
 import _thread
 from cv2 import face
-from numpy import interp
 
 # import pickle
-#model = face.createFisherFaceRecognizer()
 model = face.FisherFaceRecognizer_create()
-#fn_dir = '/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Training/att_faces'
-#(images, lables, names, id) = ([], [], {}, 0)
+#model = face.LBPHFaceRecognizer_create()
+fn_dir = '/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Training/att_faces'
+(images, lables, names, id) = ([], [], {}, 0)
 #fourcc = cv2.VideoWriter_fourcc(*'MP42')
-#for (subdirs, dirs, files) in os.walk(fn_dir):
-#    for subdir in dirs:
-#        names[id] = subdir
-#        id += 1
+for (subdirs, dirs, files) in os.walk(fn_dir):
+    for subdir in dirs:
+        names[id] = subdir
+        id += 1
+# names=['Target','Unknown']
 #out = cv2.VideoWriter('output.mp4',fourcc, 20.0, (1280 ,720))
-#model.load('trained.xml')
 model.read('trained.xml')
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 flag =0
@@ -26,8 +25,6 @@ webcam = cv2.VideoCapture(0)
 start  = time.time()
 while True:
     (rval, frame) = webcam.read()
-    height, width = frame.shape[:2]
-    desired_center =numpy.array([width/2,height/2])
     frame=cv2.flip(frame,1,0)
     #cv2.imshow(frame)
     if (flag%10==0):
@@ -48,11 +45,11 @@ while True:
 
         # Write the name of recognized face
             if prediction[1]<3000:
-                cv2.putText(frame,'%s - %.0f' % ('Target',prediction[1]),(x-10, y-10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 0))
-                labl.append('Target')
+                cv2.putText(frame,'%s - %.0f' % (names[prediction[0]],prediction[1]),(x-10, y-10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 0))
+                labl.append(names[prediction[0]])
             else:
                 cv2.putText(frame,'Unknown',(x-10, y-10), cv2.FONT_HERSHEY_PLAIN,1,(0, 255, 0))
-                labl.append('Unknown')
+                labl.append(names[prediction[0]])
     else:
         for i in range(len(faces)):
             face_i = faces[i]
@@ -74,29 +71,11 @@ while True:
     
         # apply meanshift to get the new location
             ret, track_window = cv2.meanShift(dst, track_window, term_crit)
-
+    
         # Draw it on image
             x,y,w,h = track_window
-            center=numpy.array([x+(w/2), y+(h/2)])
-            movement = desired_center - center
-            (dirX, dirY) = ("", "")
-            # ensure there is significant movement in the
-            if numpy.abs(movement[0]) > 20:
-                if movement[0] > 0:
-                    dirX = "East" 
-                else:
-                    dirX = "West"
-            if numpy.abs(movement[1]) > 20:
-                if movement[1] > 0:
-                    dirY = "North" 
-                else:
-                    dirY = "South"
-
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
-            cv2.putText(frame, "{},{}".format(dirX,dirY), (10, 30), cv2.FONT_HERSHEY_SIMPLEX,0.65, (0, 0, 255), 3)
-            cv2.putText(frame, "dx: {}, dy: {}".format(movement[0], movement[1]),(10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.35, (0, 0, 255), 1)
             cv2.putText(frame, labl[i], (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,2,(255,255,255))  
-    
 
     cv2.imshow('Test',   frame)
     #out.write(frame)
