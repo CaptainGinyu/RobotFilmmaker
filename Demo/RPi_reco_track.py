@@ -2,6 +2,11 @@ import cv2, sys, numpy, os
 import time
 from cv2 import face
 from numpy import interp
+import serial
+
+#serial import
+arduinoSerial = serial.Serial('COM3', 9600)
+
 
 # import pickle
 model = face.FisherFaceRecognizer_create()
@@ -21,7 +26,7 @@ flag = 0
 size = 5
 (im_width, im_height) = (125, 125)
 # model = pickle.load(open( "a.pickle", "rb" ))
-webcam = cv2.VideoCapture(1)
+webcam = cv2.VideoCapture(0)
 start = time.time()
 while True:
     (rval, frame) = webcam.read()
@@ -84,14 +89,26 @@ while True:
             # ensure there is significant movement in the
             if numpy.abs(movement[0]) > 20:
                 if movement[0] > 0:
-                    dirX = "East"
+                    #dirX = "East"
+                    #dirX = 50
+                    #arduinoSerial.write(bytes("30,30", 'UTF-8'))
+                    print("EAST")
                 else:
-                    dirX = "West"
+                    #dirX = "West"
+                    #dirX = 50
+                    #arduinoSerial.write(bytes("30,30", 'UTF-8'))
+                    print("WEST")
             if numpy.abs(movement[1]) > 20:
                 if movement[1] > 0:
-                    dirY = "North"
+                    #dirY = "North"
+                    #dirY = 75
+                    arduinoSerial.write(bytes("-5,-5", 'UTF-8'))
+                    print("NORTH")
                 else:
-                    dirY = "South"
+                    #dirY = "South"
+                    #dirY = 75
+                    arduinoSerial.write(bytes("5,5", 'UTF-8'))
+                    print("SOUTH")
 
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
             cv2.putText(frame, "{},{}".format(dirX, dirY), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 0, 255), 3)
