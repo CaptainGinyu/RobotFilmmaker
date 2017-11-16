@@ -1,18 +1,11 @@
 package captainginyu.robotfilmmakerandroid;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
-import org.opencv.android.JavaCameraView;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.core.Point;
@@ -20,50 +13,43 @@ import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.video.Video;
-import org.opencv.videoio.VideoCapture;
 
-import android.app.Activity;
-import android.support.v4.app.ActivityCompat;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
-import android.view.ViewGroup;
+import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.MultiProcessor;
-import com.google.android.gms.vision.face.FaceDetector;
-import com.google.android.gms.vision.Tracker;
-import com.google.android.gms.vision.face.Face;
-
-import java.io.IOException;
-
-public class MainActivity extends Activity implements CvCameraViewListener2 {
+public class MainActivity extends AppCompatActivity implements CvCameraViewListener2 {
 
     private static final String TAG = "MainActivity";
+    private static final Scalar SELECTION_RECT_COLOR = new Scalar(255, 0, 0);
 
     private int widthPixels;
     private int heightPixels;
-    private CameraSource cameraSource = null;
 
-    private JavaCameraView mOpenCvCameraView;
+    private RobotFilmmakerCameraView mOpenCvCameraView;
     private Video video;
     private RotatedRect camshiftRect;
+    private Point[] selectionRectPoints;
+
+    private FloatingActionButton cameraFlipButton;
+    private int cameraIndex;
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
             switch (status) {
-                case LoaderCallbackInterface.SUCCESS: {
+                case LoaderCallbackInterface.SUCCESS:
                     Log.i(TAG, "OpenCV loaded successfully");
-                    //mOpenCvCameraView.enableView();
-                }
-                break;
-                default: {
+                    mOpenCvCameraView.enableView();
+                    break;
+                default:
                     super.onManagerConnected(status);
-                }
-                break;
+                    break;
             }
         }
     };
@@ -80,48 +66,55 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
         setContentView(R.layout.activity_main);
 
-        mOpenCvCameraView = (JavaCameraView) findViewById(R.id.camera_view);
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         widthPixels = displayMetrics.widthPixels;
         heightPixels = displayMetrics.heightPixels;
 
+        selectionRectPoints = null;
+
+        mOpenCvCameraView = (RobotFilmmakerCameraView) findViewById(R.id.camera_view);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
-
         mOpenCvCameraView.setCvCameraViewListener(this);
-
-        Context context = getApplicationContext();
-
-        FaceDetector faceDetector = new FaceDetector.Builder(context)
-                .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
-                .setTrackingEnabled(true).build();
-        if (!faceDetector.isOperational()) {
-            Toast.makeText(this, "Face detection not yet available (may still be downloading)",
-                    Toast.LENGTH_LONG).show();
-        } else {
-            faceDetector.setProcessor(
-                    new MultiProcessor.Builder<>(new FaceTrackerFactory()).build());
-            cameraSource = new CameraSource.Builder(context, faceDetector)
-                    .setFacing(CameraSource.CAMERA_FACING_BACK).build();
-            if (cameraSource != null) {
-                try {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    cameraSource.start();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        mOpenCvCameraView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                double[] eventPoints = new double[]{
+                        (double) ((motionEvent.getX() * mOpenCvCameraView.getPreviewWidth())
+                                / widthPixels),
+                        (double) ((motionEvent.getY() * mOpenCvCameraView.getPreviewHeight())
+                                / heightPixels)};
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        selectionRectPoints = new Point[2];
+                        selectionRectPoints[0] = new Point(eventPoints);
+                        selectionRectPoints[1] = new Point(eventPoints);
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        selectionRectPoints[1].set(eventPoints);
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        selectionRectPoints[1].set(eventPoints);
+                        return true;
+                    default:
+                        break;
                 }
+                return false;
             }
-        }
+        });
+
+        cameraIndex = 0;
+        cameraFlipButton = (FloatingActionButton) findViewById(R.id.camera_flip_button);
+        cameraFlipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectionRectPoints = null;
+                cameraIndex ^= 1;
+                mOpenCvCameraView.disableView();
+                mOpenCvCameraView.setCameraIndex(cameraIndex);
+                mOpenCvCameraView.enableView();
+            }
+        });
     }
 
     @Override
@@ -141,22 +134,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
         } else {
             Log.d(TAG, "OpenCV library found inside package. Using it!");
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-            try {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                cameraSource.start();
-                //TODO: get frames from face detector and have opencv do stuff with them
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -164,9 +141,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
         super.onDestroy();
         if (mOpenCvCameraView != null) {
             mOpenCvCameraView.disableView();
-        }
-        if (cameraSource != null) {
-            cameraSource.release();
         }
     }
 
@@ -178,7 +152,10 @@ public class MainActivity extends Activity implements CvCameraViewListener2 {
 
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
         Mat rgbaFrame = inputFrame.rgba();
-        Imgproc.rectangle(rgbaFrame, new Point(50, 10), new Point(50, 50), new Scalar(255, 0, 0));
+        if ((selectionRectPoints != null) && (rgbaFrame != null)) {
+            Imgproc.rectangle(rgbaFrame, selectionRectPoints[0],
+                    selectionRectPoints[1], SELECTION_RECT_COLOR);
+        }
         return rgbaFrame;
     }
 }
