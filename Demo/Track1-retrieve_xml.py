@@ -10,7 +10,6 @@ if __name__ == '__main__':
     #Get credentials
     # adminuser has two lines: first line is access key, seconds line is secret key
     AWS_CREDS = 'adminuser.txt'
-    AWS_BUCKET_UPLOAD = 'robotfilmmaker-signals'
     AWS_BUCKET_DOWNLOAD = 'robotfilmmaker-models'
     AWS_KEY = 'trained.xml'
 
