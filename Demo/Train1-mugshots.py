@@ -12,8 +12,8 @@ webcam = cv2.VideoCapture(0)  # Use camera 0
 count = []
 add = 0
 # subject = sys.argv[1]
-folder = os.getcwd() + '\Faces\Target'
-
+folder = os.getcwd() + '/Faces/Target'
+print (os.getcwd())
 # folder = '/' + subject
 
 if not os.path.exists(folder):
@@ -42,7 +42,7 @@ while True:
             add = add + 1
 
         print(add)
-        FaceFileName = folder + '\Image_' + str(add) + '.jpg'
+        FaceFileName = folder +'/Image_' + str(add) + '.jpg'
         cv2.imwrite(FaceFileName, sub_face)
         # if str(y) not in count:
         #     count.append(str(y))

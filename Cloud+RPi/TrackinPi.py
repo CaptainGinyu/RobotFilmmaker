@@ -8,7 +8,7 @@ from numpy import interp
 model = face.FisherFaceRecognizer_create()
 #model = face.createFisherFaceRecognizer()
 # names = ['Target', 'Unknown']
-fn_dir = '/Users/harshilprajapati/Desktop/Project/faces'
+fn_dir = '/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Cloud+RPi/faces'
 (images, lables, names, id) = ([], [], {}, 0)
 for (subdirs, dirs, files) in os.walk(fn_dir):
    for subdir in dirs:
