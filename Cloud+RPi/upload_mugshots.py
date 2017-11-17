@@ -46,9 +46,9 @@ if __name__ == '__main__':
     ##########################################
     #BULK UPLOAD: Upload images
     ##########################################
-    for root,dirs,files in os.walk('./faces/Target'):
+    for root,dirs,files in os.walk('/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Cloud+RPi/faces/Target'):
         for myfile in files:
             s3.meta.client.upload_file(os.path.join(root,myfile),AWS_BUCKET_UPLOAD,os.path.join('Target/',myfile))
-    for root,dirs,files in os.walk('./faces/Unknown'):
+    for root,dirs,files in os.walk('/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Cloud+RPi/faces/Unknown'):
         for myfile in files:
             s3.meta.client.upload_file(os.path.join(root,myfile),AWS_BUCKET_UPLOAD,os.path.join('Unknown/',myfile))

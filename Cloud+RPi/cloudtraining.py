@@ -7,7 +7,7 @@ from cv2 import face
 labl = []
 size = 5
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-fn_dir = '/Users/harshilprajapati/Desktop/Project/faces'
+fn_dir = '/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Cloud+RPi/faces'
 flag =0
 
 print('Training...')
@@ -34,4 +34,4 @@ for (subdirs, dirs, files) in os.walk(fn_dir):
 
 model = face.FisherFaceRecognizer_create()
 model.train(images, lables)
-model.write('trained.xml')
+model.write('localtrained.xml')

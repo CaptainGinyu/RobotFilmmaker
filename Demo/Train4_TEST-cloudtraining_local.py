@@ -1,16 +1,19 @@
 import cv2, sys, numpy, os
 import time
+#import _thread
 from cv2 import face
+# import pickle
 
+labl = []
 size = 5
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-
-fn_dir = os.getcwd() + '\Faces'
-flag = 0
+fn_dir = os.getcwd() + '/Faces'
+# fn_dir = '/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Cloud+RPi/faces'
+flag =0
 
 print('Training...')
 
-(images, labels, names, id) = ([], [], {}, 0)
+(images, lables, names, id) = ([], [], {}, 0)
 for (subdirs, dirs, files) in os.walk(fn_dir):
     for subdir in dirs:
         names[id] = subdir
@@ -23,15 +26,13 @@ for (subdirs, dirs, files) in os.walk(fn_dir):
                 ximg=cv2.resize(ximg,(125,125))
                 otsu = cv2.adaptiveThreshold(ximg,255,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,2)
                 images.append(otsu)
-                labels.append(int(lable))
+                lables.append(int(lable))
         id += 1
 (im_width, im_height) = (125, 125)
-#print(labels)
+#print(lables)
 
-(images, labels) = [numpy.array(lis) for lis in [images, labels]]
+(images, lables) = [numpy.array(lis) for lis in [images, lables]]
 
-model = cv2.face.FisherFaceRecognizer_create()
-model.train(images, labels)
-model.save('trained.xml')
-
-print('XML generated')
+model = face.FisherFaceRecognizer_create()
+model.train(images, lables)
+model.write('localtrained.xml')
