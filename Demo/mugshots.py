@@ -12,9 +12,9 @@ webcam = cv2.VideoCapture(0)  # Use camera 0
 count = []
 add = 0
 # subject = sys.argv[1]
-subject = 'Target'
+subject = '/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Demo/Target'
 
-folder = './' + subject
+folder = '/' + subject
 
 if not os.path.exists(folder):
     os.makedirs(folder)

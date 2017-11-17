@@ -4,15 +4,10 @@ import _thread
 from cv2 import face
 from numpy import interp
 
-# import pickle
-<<<<<<< HEAD
-#model = face.createFisherFaceRecognizer()
+
 model = face.FisherFaceRecognizer_create()
-=======
-model = face.createFisherFaceRecognizer()
+# model = face.createFisherFaceRecognizer()
 names = ['Target', 'Unknown']
-#model = face.LBPHFaceRecognizer_create()
->>>>>>> 99ac974fbe6d25c5b6ffe67d108ea37bf2266716
 #fn_dir = '/Users/harshilprajapati/Desktop/Boston University/Semester 1/Product Design in ECE/RobotFilmMaker/RobotFilmmaker/Training/att_faces'
 #(images, lables, names, id) = ([], [], {}, 0)
 #fourcc = cv2.VideoWriter_fourcc(*'MP42')
@@ -22,7 +17,7 @@ names = ['Target', 'Unknown']
 #        id += 1
 #out = cv2.VideoWriter('output.mp4',fourcc, 20.0, (1280 ,720))
 #model.load('trained.xml')
-model.read('trained.xml')
+model.read('oldtrained.xml')
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 flag =0
 size = 5
@@ -36,7 +31,7 @@ while True:
     desired_center =numpy.array([width/2,height/2])
     frame=cv2.flip(frame,1,0)
     #cv2.imshow(frame)
-    if (flag%10==0):
+    if (flag%5==0):
         labl = []
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         #gray = cv2.resize(gray,im_height,im_width)

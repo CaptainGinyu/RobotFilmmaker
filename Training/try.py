@@ -13,7 +13,6 @@ for (subdirs, dirs, files) in os.walk(fn_dir):
     for subdir in dirs:
         names[id] = subdir
         id += 1
-# names=['Target','Unknown']
 #out = cv2.VideoWriter('output.mp4',fourcc, 20.0, (1280 ,720))
 model.read('trained.xml')
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
