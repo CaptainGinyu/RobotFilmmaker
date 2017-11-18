@@ -6,7 +6,7 @@
     android:layout_height="match_parent" >
 
     <captainginyu.robotfilmmakerandroid.RobotFilmmakerCameraView
-        android:id="@+id/camera_view"
+        android:id="@+id/camera_view_subject_select"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="gone"
@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="end|bottom">
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/camera_flip_button"
+            android:id="@+id/camera_flip_button_subject_selection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
@@ -27,7 +27,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true" />
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/start_selection_button"
+            android:id="@+id/start_selection_button_subject_selection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_select"
