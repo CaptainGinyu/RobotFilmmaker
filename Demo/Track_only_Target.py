@@ -100,7 +100,8 @@ while True:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
                 cv2.putText(frame, "{},{}".format(dirX,dirY), (10, 30), cv2.FONT_HERSHEY_SIMPLEX,0.65, (0, 0, 255), 3)
                 cv2.putText(frame, "dx: {}, dy: {}".format(movement[0], movement[1]),(10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.35, (0, 0, 255), 1)
-                cv2.putText(frame, labl[i], (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,2,(255,255,255))  
+                # cv2.putText(frame, labl[i], (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,2,(255,255,255))  
+                cv2.putText(frame, 'Target', (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,2,(255,255,255))  
     
 
     cv2.imshow('Test',   frame)
