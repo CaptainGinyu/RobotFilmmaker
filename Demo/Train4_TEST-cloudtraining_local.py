@@ -17,6 +17,7 @@ print('Training...')
 for (subdirs, dirs, files) in os.walk(fn_dir):
     for subdir in dirs:
         names[id] = subdir
+        
         subjectpath = os.path.join(fn_dir, subdir)
         for filename in os.listdir(subjectpath):
             if filename.startswith('I'):

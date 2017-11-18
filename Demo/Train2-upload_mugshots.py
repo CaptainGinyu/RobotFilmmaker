@@ -47,7 +47,6 @@ if __name__ == '__main__':
     #BULK UPLOAD: Upload images
     ##########################################
     folder_target = os.getcwd() + '/Faces/Target'
-    folder_unknown = os.getcwd() + '/Faces/Unknown'
 
     print("Uploading /Faces/Target")
     #Upload target folder
@@ -55,10 +54,12 @@ if __name__ == '__main__':
         for myfile in files:
             s3.meta.client.upload_file(os.path.join(root,myfile),AWS_BUCKET_UPLOAD,os.path.join('Target/',myfile))
 
-    print("Uploading /Faces/Unknown")
-    #Upload unknown folder
-    for root,dirs,files in os.walk(folder_unknown):
+    folder_target = os.getcwd() + '/Faces/Kevin'
+
+    print("Uploading /Faces/Kevin")
+    #Upload target folder
+    for root,dirs,files in os.walk(folder_target):
         for myfile in files:
-            s3.meta.client.upload_file(os.path.join(root,myfile),AWS_BUCKET_UPLOAD,os.path.join('Unknown/',myfile))
+            s3.meta.client.upload_file(os.path.join(root,myfile),AWS_BUCKET_UPLOAD,os.path.join('Kevin/',myfile))
 
     print("Uploading complete!")
