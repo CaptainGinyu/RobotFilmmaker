@@ -1,5 +1,4 @@
 # Robot Filmmaker
-EC601
 Kevin Chow
 Harshil Prajapati
 Nikhil Ranjan
@@ -19,3 +18,23 @@ For people who wish to film themselves in a non-selfie fashion, Robot Filmmaker 
   - Film me in many different ways
   - Such as left frame only, fixed distance, etc.
   - Recognize and follow other objects like a ball or dog
+
+## System Description
+### Hardware and Software Used
+  - Android Studio
+  - Amazon Web Services
+  - Raspberry Pi
+  - Arduino
+  - Servos, Linear Actuator, Cart
+  
+### System Diagram
+
+## Repository Description
+  - **Archives:** Archive of backups and unused code and pictures
+  - **Demo:** Demo-ready code
+    - COMBINED-Train1-Mugshots.py:
+      1/2 of Training. Takes streaming video and saves mugshots of target's face
+    - COMBINED-Train2-UploadTrain.py: 2/2 of Training. Uploads mugshots of target to S3 buckets, executes training to generate xml file of model in another S3 bucket.  AWS credentials needed to run this.
+    - COMBINED-Track.py: 1/1 of Tracking. Downloads xml model from S3 bucket. Does tracking
+  - **Examples + Tutorials:** Example code and tutorials of how we wrote and set up cloud management
+  
