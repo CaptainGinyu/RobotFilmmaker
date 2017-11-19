@@ -11,7 +11,7 @@ AWS_BUCKET_UPLOAD = "robotfilmmaker-models"
 #########################################################################
 # GET MUGSHOTS FROM S3 BUCKET PHOTOS
 #########################################################################
-print('Downloading mugshots...')
+# print('Downloading mugshots...')
 s3_dl = boto3.resource('s3')
 
 bucket_dl = s3_dl.Bucket(AWS_BUCKET_DOWNLOAD)
@@ -23,7 +23,7 @@ for myfile in bucket_dl.objects.all():
 #########################################################################
 # DO TRAINING
 #########################################################################
-print('Training...')
+# print('Training...')
 (images, labels, names, id) = ([], [], {}, 0)
 for (subdirs, dirs, files) in os.walk(fn_dir):
     for subdir in dirs:
@@ -49,12 +49,12 @@ for (subdirs, dirs, files) in os.walk(fn_dir):
 # Train and save
 model = face.FisherFaceRecognizer_create()
 model.train(images, labels)
-model.write('trained.xml')
+model.write(os.path.join(xml_dir + '/trained.xml'))
 
 #########################################################################
 # PUT IN S3 MODEL BUCKET
 #########################################################################
-print('Uploading XML...')
+# print('Uploading XML...')
 s3_ul = boto3.resource('s3')
 
 s3_ul.meta.client.upload_file(xml_dir + '/trained.xml', AWS_BUCKET_UPLOAD, 'trained.xml')

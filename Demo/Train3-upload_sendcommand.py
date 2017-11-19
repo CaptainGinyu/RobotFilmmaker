@@ -35,7 +35,7 @@ if __name__ == '__main__':
     #START SCRIPT
     ##########################################
     commands = ['sh /home/ec2-user/robotfilmmaker/starttraining.sh']
-    instance_ids = ['i-01608966e12056364']
+    instance_ids = ['i-09cdfca3b64d75b0e']
 
     response = ssm_client.send_command(
         DocumentName="AWS-RunShellScript",

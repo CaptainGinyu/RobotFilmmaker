@@ -1,10 +1,13 @@
-# EXAMPLE OF SEND_COMMAND
+# Sends command to instance to start a python script
 
 import boto3
-import pprint
 
 if __name__ == '__main__':
-    #adminuser has two lines: first line is access key, seconds line is secret key
+    ##########################################
+    #CREDENTIALS AND RESOURCE OPENING
+    ##########################################
+    #Get credentials:
+    #adminuser.txt has two lines: first line is access key, seconds line is secret key
     try:
         file = open('adminuser.txt','r')
         creds = file.readlines()
@@ -24,15 +27,20 @@ if __name__ == '__main__':
     ssm_client = boto3.client(
         'ssm',
         aws_access_key_id = creds[0],
-        aws_secret_access_key = creds[1]
+        aws_secret_access_key = creds[1],
+        region_name = 'us-east-1'
     )
 
-    #commands = ['cd /home/ec2-user','sh start.sh']
-    commands = ['sh /home/ec2-user/start.sh']
-    instance_ids = ['i-0e2b18570ed94a64e']
+    ##########################################
+    #START SCRIPT
+    ##########################################
+    commands = ['sh /home/ec2-user/robotfilmmaker/starttraining.sh']
+    instance_ids = ['i-09cdfca3b64d75b0e']
 
     response = ssm_client.send_command(
         DocumentName="AWS-RunShellScript",
         Parameters={'commands':commands},
         InstanceIds=instance_ids
     )
+
+    print('Successful xml file creation')
