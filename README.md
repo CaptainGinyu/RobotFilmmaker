@@ -1,8 +1,5 @@
 # Robot Filmmaker
-Kevin Chow
-Harshil Prajapati
-Nikhil Ranjan
-Philip Yuan
+Kevin Chow, Harshil Prajapati, Nikhil Ranjan, Philip Yuan
 
 ## Product Description
 For people who wish to film themselves in a non-selfie fashion, Robot Filmmaker is a robotic system that will track and record videos of a given person or object.  Unlike video drones, our product will reduce the need of human control during the filming process so that the person being filmed can focus on quality acting.
@@ -28,6 +25,7 @@ For people who wish to film themselves in a non-selfie fashion, Robot Filmmaker 
   - Servos, Linear Actuator, Cart
   
 ### System Diagram
+![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/SystemDiagram.PNG)
 
 ## Repository Description
   - **Archives:** Archive of backups and unused code and pictures
