@@ -60,12 +60,12 @@ if __name__ == '__main__':
 
     names = ['Kevin', 'Target']
     fn_dir = os.getcwd() + '/Faces'
-    # (images, lables, names, id) = ([], [], {}, 0)
-    # for (subdirs, dirs, files) in os.walk(fn_dir):
-    #     for subdir in dirs:
-    #         names[id] = subdir
-    #         print (subdir)
-    #         id += 1
+    (images, lables, names, id) = ([], [], {}, 0)
+    for (subdirs, dirs, files) in os.walk(fn_dir):
+        for subdir in dirs:
+            names[id] = subdir
+            print (subdir)
+            id += 1
     model.read('trained.xml')
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
     flag = 0
