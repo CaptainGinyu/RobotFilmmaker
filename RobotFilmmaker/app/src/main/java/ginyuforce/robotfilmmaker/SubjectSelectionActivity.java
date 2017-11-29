@@ -1,9 +1,7 @@
 package ginyuforce.robotfilmmaker;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +24,6 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.tracking.Tracker;
 
-import java.io.InputStream;
-
 /**
  * Created by Kevin on 11/17/2017.
  */
@@ -47,7 +43,7 @@ public class SubjectSelectionActivity extends AppCompatActivity
     private FloatingActionButton cameraFlipButton;
     private int cameraIndex;
 
-    private FloatingActionButton startSubjectSelectButton;
+    private FloatingActionButton startStopButton;
 
     private Mat takenPic;
 
@@ -56,6 +52,8 @@ public class SubjectSelectionActivity extends AppCompatActivity
     private Rect2d selectionRect;
 
     private Mat hsv;
+
+    private boolean doneDoingSelection;
 
     static {
         System.loadLibrary("opencv_java3");
@@ -111,27 +109,46 @@ public class SubjectSelectionActivity extends AppCompatActivity
         mOpenCvCameraView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                double[] eventPoints = new double[]{
-                        (double) ((motionEvent.getX() * mOpenCvCameraView.getPreviewWidth())
-                                / widthPixels),
-                        (double) ((motionEvent.getY() * mOpenCvCameraView.getPreviewHeight())
-                                / heightPixels)};
-                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_DOWN:
-                        selectionRectPoints = new Point[2];
-                        selectionRectPoints[0] = new Point(eventPoints);
-                        selectionRectPoints[1] = new Point(eventPoints);
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        selectionRectPoints[1].set(eventPoints);
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                        selectionRectPoints[1].set(eventPoints);
-                        return true;
-                    default:
-                        break;
+                if (!doneDoingSelection) {
+                    double[] eventPoints = new double[]{
+                            (double) ((motionEvent.getX() * mOpenCvCameraView.getPreviewWidth())
+                                    / widthPixels),
+                            (double) ((motionEvent.getY() * mOpenCvCameraView.getPreviewHeight())
+                                    / heightPixels)};
+                    switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_DOWN:
+                            selectionRectPoints = new Point[2];
+                            selectionRectPoints[0] = new Point(eventPoints);
+                            selectionRectPoints[1] = new Point(eventPoints);
+                            return true;
+                        case MotionEvent.ACTION_MOVE:
+                            selectionRectPoints[1].set(eventPoints);
+                            return true;
+                        case MotionEvent.ACTION_UP:
+                            selectionRectPoints[1].set(eventPoints);
+                            startStopButton.setVisibility(View.VISIBLE);
+                            return true;
+                        default:
+                            break;
+                    }
                 }
                 return false;
+            }
+        });
+
+        startStopButton = (FloatingActionButton) findViewById(
+                R.id.subject_select_tracker_start_stop_button);
+        startStopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (doneDoingSelection) {
+                    doneDoingSelection = false;
+                    startStopButton.setImageResource(R.drawable.ic_check_black_24dp);
+                    startStopButton.setVisibility(View.GONE);
+                    return;
+                }
+                doneDoingSelection = true;
+                startStopButton.setImageResource(R.drawable.ic_stop_black_24dp);
             }
         });
 
@@ -140,6 +157,10 @@ public class SubjectSelectionActivity extends AppCompatActivity
         cameraFlipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                doneDoingSelection = false;
+                startStopButton.setImageResource(R.drawable.ic_check_black_24dp);
+                startStopButton.setVisibility(View.GONE);
+
                 selectionRectPoints = null;
                 cameraIndex ^= 1;
                 mOpenCvCameraView.disableView();
@@ -150,24 +171,13 @@ public class SubjectSelectionActivity extends AppCompatActivity
 
         takenPic = null;
 
-        startSubjectSelectButton
-                = (FloatingActionButton) findViewById(R.id.start_selection_button_subject_select);
-        startSubjectSelectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startSubjectSelectButton.setEnabled(false);
-                cameraFlipButton.setEnabled(false);
-                startSubjectSelectButton.setVisibility(View.GONE);
-                cameraFlipButton.setVisibility(View.GONE);
-            }
-        });
-
-
         tracker = Tracker.create("KCF");
         trackerInitialized = false;
         selectionRect = null;
 
         hsv = new Mat();
+
+        doneDoingSelection = false;
     }
 
 
@@ -212,26 +222,35 @@ public class SubjectSelectionActivity extends AppCompatActivity
                     selectionRectPoints[1], SELECTION_RECT_COLOR);
         }*/
 
-        Imgproc.cvtColor(rgbaFrame, hsv, Imgproc.COLOR_BGR2HSV);
-        if (rgbaFrame != null) {
-            if (!trackerInitialized) {
-                selectionRect = new Rect2d(100.0, 100.0, 200.0, 200.0);
-                tracker.init(hsv, selectionRect);
-                trackerInitialized = true;
-                Log.i("tracker", "initialized");
+        if (inputFrame != null) {
+            if (doneDoingSelection) {
+                Imgproc.cvtColor(rgbaFrame, hsv, Imgproc.COLOR_BGR2HSV);
+                if (!trackerInitialized) {
+                    //selectionRect = new Rect2d(100.0, 100.0, 200.0, 200.0);
+                    Point selectionRectTopLeftPoint = selectionRectPoints[0];
+                    Point selectionRectBottomRightPoint = selectionRectPoints[1];
+                    selectionRect = new Rect2d(selectionRectTopLeftPoint.x, selectionRectTopLeftPoint.y,
+                            selectionRectBottomRightPoint.x - selectionRectTopLeftPoint.x,
+                            selectionRectBottomRightPoint.y - selectionRectTopLeftPoint.y);
+                    tracker.init(hsv, selectionRect);
+                    trackerInitialized = true;
+                    Log.i("tracker", "initialized");
 
-            } else {
-                tracker.update(hsv, selectionRect);
-                Log.i("tracker", "update");
+                } else {
+                    tracker.update(hsv, selectionRect);
+                    Log.i("tracker", "update");
+                }
+
+                Log.i("tracker coords", Double.toString(selectionRect.x)
+                        + ", " + Double.toString(selectionRect.y));
+
+                Imgproc.rectangle(rgbaFrame, new Point(selectionRect.x, selectionRect.y),
+                        new Point(selectionRect.x + selectionRect.width, selectionRect.y + selectionRect.height), SELECTION_RECT_COLOR);
+            } else if (selectionRectPoints != null) {
+                Imgproc.rectangle(rgbaFrame, selectionRectPoints[0],
+                        selectionRectPoints[1], SELECTION_RECT_COLOR);
             }
-
-            Log.i("tracker coords", Double.toString(selectionRect.x)
-                    + ", " + Double.toString(selectionRect.y));
-
-            Imgproc.rectangle(rgbaFrame, new Point(selectionRect.x, selectionRect.y),
-                    new Point(selectionRect.x + selectionRect.width, selectionRect.y + selectionRect.height), SELECTION_RECT_COLOR);
         }
-
 
         return rgbaFrame;
     }
