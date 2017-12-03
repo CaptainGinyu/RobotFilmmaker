@@ -5,7 +5,7 @@ Servo p;
 int pos;
 int pos2;
 int motor1Angle = 90;
-int motor2Angle  = 0;
+int motor2Angle  = 45;
 String  motorInstructions;
 int motor1Angle_update;
 int motor2Angle_update;
@@ -33,7 +33,7 @@ void loop()
     motor2Angle_update = motorInstructions.substring(commaLocation+1).toInt();
     Serial.println("Input 2: ");
     Serial.print(motor2Angle_update);
-    if (motor1Angle < 180 and motor2Angle < 180 )
+    if (motor1Angle < 140 and motor2Angle < 90 and motor1Angle > 0 and motor2Angle < 0)
     {
       if (motor1Angle_update > 0)
       {
@@ -78,13 +78,18 @@ void loop()
            }
        }
     }
-        motor1Angle = motor1Angle + motor1Angle_update;
+    else 
+    {
+      motor1Angle= 90;
+      motor2Angle = 45;
+      }
+    
+    motor1Angle = motor1Angle + motor1Angle_update;
     motor2Angle = motor2Angle + motor2Angle_update;
     Serial.println("Motor 1 Updated Angle: ");
     Serial.println(motor1Angle);
     Serial.println("Motor 2 Updated Angle: ");
     Serial.println(motor2Angle);
-    
     }
 
 }

@@ -74,7 +74,7 @@ face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 flag = 0
 size = 5
 (im_width, im_height) = (125, 125)
-webcam = cv2.VideoCapture(0)
+webcam = cv2.VideoCapture(1)
 start = time.time()
 target = 0
 while True:
@@ -97,28 +97,36 @@ while True:
             prediction = model.predict(otsu)
             # cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
             # print (prediction[1])
-            center = numpy.array([x + (w / 2), y + (h / 2)])
-            movement = desired_center - center
             (dirX, dirY) = ("", "")
-            # ensure there is significant movement in the
-            if numpy.abs(movement[0]) > 20:
-                if movement[0] > 0:
-                    dirX = "East"
-                    arduinoSerial.write(bytes("30,0", 'UTF-8'))
-                    print ('30,0')
-                else:
-                    dirX = "West"
-                    arduinoSerial.write(bytes("-30,0", 'UTF-8'))
-                    print ('-30,0')
-            if numpy.abs(movement[1]) > 20:
-                if movement[1] > 0:
-                    dirY = "North"
-                    arduinoSerial.write(bytes("0,30", 'UTF-8'))
-                    print ('0,30')
-                else:
-                    dirY = "South"
-                    # arduinoSerial.write(bytes("0,-30#1", 'UTF-8'))
-                    # print ('0,-30')
+            if (flag % 10 == 0):
+                center = numpy.array([x + (w / 2), y + (h / 2)])
+                movement = desired_center - center
+                
+                # ensure there is significant movement in the
+                if numpy.abs(movement[0]) > 20:
+                    if movement[0] > 0:
+                        dirX = "East"
+                        arduinoSerial.write(bytes("0,-10", 'UTF-8'))
+                        time.sleep(2)
+                        print ('0,-10')
+                    else:
+                        dirX = "West"
+                        arduinoSerial.write(bytes("0,10", 'UTF-8'))
+                        time.sleep(2)
+                        print ('0,10')
+                elif numpy.abs(movement[1]) > 20:
+                    if movement[1] > 0:
+                        dirY = "North"
+                        arduinoSerial.write(bytes("-10,0", 'UTF-8'))
+                        time.sleep(2)
+                        print ('10,0')
+                    else:
+                        dirY = "South"
+                        arduinoSerial.write(bytes("10,0", 'UTF-8'))
+                        time.sleep(2)
+                        print ('-10,0')
+                # else:
+                #     arduinoSerial.write(bytes("0,0", 'UTF-8'))
 
             # Write the name of recognized face
             name = names[prediction[0]]
@@ -160,10 +168,10 @@ while True:
                 x, y, w, h = track_window
 
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
-                cv2.putText(frame, "{},{}".format(dirX, dirY), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 0, 255), 3)
-                cv2.putText(frame, "dx: {}, dy: {}".format(movement[0], movement[1]), (10, frame.shape[0] - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
-                # cv2.putText(frame, labl[i], (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,2,(255,255,255))
+                # cv2.putText(frame, "{},{}".format(dirX, dirY), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 0, 255), 3)
+                # cv2.putText(frame, "dx: {}, dy: {}".format(movement[0], movement[1]), (10, frame.shape[0] - 10),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
+                # # cv2.putText(frame, labl[i], (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN,2,(255,255,255))
                 cv2.putText(frame, 'Target', (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255))
 
     cv2.imshow('Test', frame)
