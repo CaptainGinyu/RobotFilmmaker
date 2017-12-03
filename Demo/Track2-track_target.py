@@ -8,13 +8,13 @@ from numpy import interp
 model = face.FisherFaceRecognizer_create()
 #model = face.createFisherFaceRecognizer()
 
-names = ['Kevin','Target']
+# names = ['Kevin','Target']
 fn_dir = os.getcwd() + '/Faces'
 (images, lables, names, id) = ([], [], {}, 0)
 for (subdirs, dirs, files) in os.walk(fn_dir):
    for subdir in dirs:
        names[id] = subdir
-       print (subdir)
+    #    print (subdir)
        id += 1
 #model.load('trained.xml')
 model.read('localtrained.xml')
