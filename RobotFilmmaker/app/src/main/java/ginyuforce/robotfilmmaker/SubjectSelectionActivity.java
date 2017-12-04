@@ -55,6 +55,8 @@ public class SubjectSelectionActivity extends AppCompatActivity
 
     private boolean doneDoingSelection;
 
+    private Thread trackingThread;
+
     static {
         System.loadLibrary("opencv_java3");
     }
@@ -145,6 +147,9 @@ public class SubjectSelectionActivity extends AppCompatActivity
                     doneDoingSelection = false;
                     startStopButton.setImageResource(R.drawable.ic_check_black_24dp);
                     startStopButton.setVisibility(View.GONE);
+                    selectionRect = null;
+                    selectionRectPoints = null;
+                    trackerInitialized = false;
                     return;
                 }
                 doneDoingSelection = true;
@@ -171,13 +176,15 @@ public class SubjectSelectionActivity extends AppCompatActivity
 
         takenPic = null;
 
-        tracker = Tracker.create("KCF");
+        tracker = null;
         trackerInitialized = false;
         selectionRect = null;
 
         hsv = new Mat();
 
         doneDoingSelection = false;
+
+        trackingThread = null;
     }
 
 
@@ -207,6 +214,9 @@ public class SubjectSelectionActivity extends AppCompatActivity
         if (mOpenCvCameraView != null) {
             mOpenCvCameraView.disableView();
         }
+        if (trackingThread.isAlive()) {
+            trackingThread.interrupt();
+        }
     }
 
     public void onCameraViewStarted(int width, int height) {
@@ -217,38 +227,89 @@ public class SubjectSelectionActivity extends AppCompatActivity
 
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Mat rgbaFrame = inputFrame.rgba();
-        /*if ((selectionRectPoints != null) && (rgbaFrame != null)) {
-            Imgproc.rectangle(rgbaFrame, selectionRectPoints[0],
-                    selectionRectPoints[1], SELECTION_RECT_COLOR);
-        }*/
 
         if (inputFrame != null) {
-            if (doneDoingSelection) {
+            if (doneDoingSelection && (selectionRectPoints != null)) {
                 Imgproc.cvtColor(rgbaFrame, hsv, Imgproc.COLOR_BGR2HSV);
+                /*if (trackingThread == null) {
+                    trackingThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!trackerInitialized) {
+                                tracker = Tracker.create("KCF");
+                                if (selectionRectPoints != null) {
+                                    Point selectionRectTopLeftPoint = selectionRectPoints[0];
+                                    Point selectionRectBottomRightPoint = selectionRectPoints[1];
+                                    if ((selectionRectTopLeftPoint != null)
+                                            && (selectionRectBottomRightPoint != null)) {
+                                        selectionRect = new Rect2d(selectionRectTopLeftPoint.x, selectionRectTopLeftPoint.y,
+                                                selectionRectBottomRightPoint.x - selectionRectTopLeftPoint.x,
+                                                selectionRectBottomRightPoint.y - selectionRectTopLeftPoint.y);
+                                        tracker.init(hsv, selectionRect);
+                                        trackerInitialized = true;
+                                        Log.i("tracker", "initialized");
+                                    }
+
+                                }
+
+
+                            } else {
+                                tracker.update(hsv, selectionRect);
+                                Log.i("tracker", "update");
+                            }
+
+                            if (selectionRect != null) {
+                                Log.i("tracker coords", Double.toString(selectionRect.x)
+                                        + ", " + Double.toString(selectionRect.y));
+                            }
+                        }
+                    });
+                    trackingThread.start();
+                }*/
                 if (!trackerInitialized) {
-                    //selectionRect = new Rect2d(100.0, 100.0, 200.0, 200.0);
-                    Point selectionRectTopLeftPoint = selectionRectPoints[0];
-                    Point selectionRectBottomRightPoint = selectionRectPoints[1];
-                    selectionRect = new Rect2d(selectionRectTopLeftPoint.x, selectionRectTopLeftPoint.y,
-                            selectionRectBottomRightPoint.x - selectionRectTopLeftPoint.x,
-                            selectionRectBottomRightPoint.y - selectionRectTopLeftPoint.y);
-                    tracker.init(hsv, selectionRect);
-                    trackerInitialized = true;
-                    Log.i("tracker", "initialized");
+                    tracker = Tracker.create("KCF");
+                    if (selectionRectPoints != null) {
+                        Point selectionRectTopLeftPoint = selectionRectPoints[0];
+                        Point selectionRectBottomRightPoint = selectionRectPoints[1];
+                        if ((selectionRectTopLeftPoint != null)
+                                && (selectionRectBottomRightPoint != null)) {
+                            selectionRect = new Rect2d(selectionRectTopLeftPoint.x, selectionRectTopLeftPoint.y,
+                                    selectionRectBottomRightPoint.x - selectionRectTopLeftPoint.x,
+                                    selectionRectBottomRightPoint.y - selectionRectTopLeftPoint.y);
+                            tracker.init(hsv, selectionRect);
+                            trackerInitialized = true;
+                            Log.i("tracker", "initialized");
+                        }
+
+                    }
+
 
                 } else {
                     tracker.update(hsv, selectionRect);
                     Log.i("tracker", "update");
                 }
 
-                Log.i("tracker coords", Double.toString(selectionRect.x)
-                        + ", " + Double.toString(selectionRect.y));
-
-                Imgproc.rectangle(rgbaFrame, new Point(selectionRect.x, selectionRect.y),
-                        new Point(selectionRect.x + selectionRect.width, selectionRect.y + selectionRect.height), SELECTION_RECT_COLOR);
+                if (selectionRect != null) {
+                    Log.i("tracker coords", Double.toString(selectionRect.x)
+                            + ", " + Double.toString(selectionRect.y));
+                /*synchronized (selectionRect) {
+                    if (selectionRect != null) {
+                        Imgproc.rectangle(rgbaFrame, new Point(selectionRect.x, selectionRect.y),
+                                new Point(selectionRect.x + selectionRect.width, selectionRect.y + selectionRect.height), SELECTION_RECT_COLOR);
+                    }
+                }*/
+                    Imgproc.rectangle(rgbaFrame, new Point(selectionRect.x, selectionRect.y),
+                            new Point(selectionRect.x + selectionRect.width, selectionRect.y + selectionRect.height), SELECTION_RECT_COLOR);
+                }
             } else if (selectionRectPoints != null) {
-                Imgproc.rectangle(rgbaFrame, selectionRectPoints[0],
-                        selectionRectPoints[1], SELECTION_RECT_COLOR);
+                Point selectionRectTopLeftPoint = selectionRectPoints[0];
+                Point selectionRectBottomRightPoint = selectionRectPoints[1];
+                if ((selectionRectTopLeftPoint != null)
+                        && (selectionRectBottomRightPoint != null)) {
+                    Imgproc.rectangle(rgbaFrame, selectionRectPoints[0],
+                            selectionRectPoints[1], SELECTION_RECT_COLOR);
+                }
+
             }
         }
 
