@@ -98,33 +98,33 @@ while True:
             # cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
             # print (prediction[1])
             (dirX, dirY) = ("", "")
-            if (flag % 10 == 0):
+            if (flag % 11 == 0):
                 center = numpy.array([x + (w / 2), y + (h / 2)])
                 movement = desired_center - center
                 
                 # ensure there is significant movement in the
-                if numpy.abs(movement[0]) > 20:
+                if numpy.abs(movement[0]) > 50:
                     if movement[0] > 0:
                         dirX = "East"
-                        arduinoSerial.write(bytes("0,-10", 'UTF-8'))
-                        time.sleep(2)
-                        print ('0,-10')
+                        arduinoSerial.write(bytes('r', 'UTF-8'))
+                        # time.sleep(2)
+                        print ('r')
                     else:
                         dirX = "West"
-                        arduinoSerial.write(bytes("0,10", 'UTF-8'))
-                        time.sleep(2)
-                        print ('0,10')
-                elif numpy.abs(movement[1]) > 20:
+                        arduinoSerial.write(bytes('l', 'UTF-8'))
+                        # time.sleep(2)
+                        print ('l')
+                if numpy.abs(movement[1]) > 50:
                     if movement[1] > 0:
                         dirY = "North"
-                        arduinoSerial.write(bytes("-10,0", 'UTF-8'))
-                        time.sleep(2)
-                        print ('10,0')
+                        arduinoSerial.write(bytes('u', 'UTF-8'))
+                        # time.sleep(2)
+                        print ('u')
                     else:
                         dirY = "South"
-                        arduinoSerial.write(bytes("10,0", 'UTF-8'))
-                        time.sleep(2)
-                        print ('-10,0')
+                        arduinoSerial.write(bytes('d', 'UTF-8'))
+                        # time.sleep(2)
+                        print ('d')
                 # else:
                 #     arduinoSerial.write(bytes("0,0", 'UTF-8'))
 
