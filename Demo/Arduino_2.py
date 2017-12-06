@@ -83,7 +83,7 @@ while True:
     desired_center = numpy.array([width / 2, height / 2])
     frame = cv2.flip(frame, 1, 0)
     # cv2.imshow(frame)
-    if (flag % 5 == 0):
+    if (flag % 10 == 0):
         labl = []
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         mini = cv2.resize(gray, (int(gray.shape[1] / size), int(gray.shape[0] / size)))
@@ -101,7 +101,8 @@ while True:
             if (flag % 11 == 0):
                 center = numpy.array([x + (w / 2), y + (h / 2)])
                 movement = desired_center - center
-                
+                length_face = x + w;
+                width_face = y +h;
                 # ensure there is significant movement in the
                 if numpy.abs(movement[0]) > 50:
                     if movement[0] > 0:
@@ -125,8 +126,13 @@ while True:
                         arduinoSerial.write(bytes('d', 'UTF-8'))
                         # time.sleep(2)
                         print ('d')
-                # else:
-                #     arduinoSerial.write(bytes("0,0", 'UTF-8'))
+                if numpy.abs(length_face) < height/3 or numpy.abs(width_face) < width/3:
+                    arduinoSerial.write(bytes('f', 'UTF-8'))
+                    print ('f')
+
+                if numpy.abs(length_face) > height/3 or numpy.abs(width_face) > width/3:
+                    arduinoSerial.write(bytes('b', 'UTF-8'))
+                    print ('b')
 
             # Write the name of recognized face
             name = names[prediction[0]]
