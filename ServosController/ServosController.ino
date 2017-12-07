@@ -46,7 +46,7 @@ void loop()
       char currChar = motorInstructions.charAt(i);
       if (currChar == 'r')
       {
-        for (int j = 0; j < 10; j++)
+        for (int j = 0; j < 5; j++)
         {
           motor1Angle++;
           motor1.write(motor1Angle);
@@ -55,7 +55,7 @@ void loop()
       }
       if (currChar == 'l')
       {
-        for (int j = 0; j < 10; j++)
+        for (int j = 0; j < 5; j++)
         {
           motor1Angle--;
           motor1.write(motor1Angle);
@@ -64,7 +64,7 @@ void loop()
       }
       if (currChar == 'u')
       {
-        for (int j = 0; j < 10; j++)
+        for (int j = 0; j < 5; j++)
         {
           motor2Angle++;
           motor2.write(motor2Angle);
@@ -73,29 +73,29 @@ void loop()
       }
       if (currChar == 'd')
       {
-        for (int j = 0; j < 10; j++)
+        for (int j = 0; j < 5; j++)
         {
           motor2Angle--;
           motor2.write(motor2Angle);
           delay(50);
         }
       }
-      if (currChar == 'f')
-      {
-        analogWrite(left_side, 100);
-        analogWrite(right_side, 100);
-        digitalWrite(left_side_2,LOW) ;
-        digitalWrite(right_side_2,LOW) ;
-        delay(3000)
-      }
-      if (currChar == 'b')
-      {
-        analogWrite(left_side_2, 100);
-        analogWrite(right_side_2, 100);
-        digitalWrite(left_side,LOW) ;
-        digitalWrite(right_side,LOW) ;
-        delay(3000)
-      }
+//      if (currChar == 'f')
+//      {
+//        analogWrite(left_side, 100);
+//        analogWrite(right_side, 100);
+//        digitalWrite(left_side_2,LOW) ;
+//        digitalWrite(right_side_2,LOW) ;
+//        delay(3000)
+//      }
+//      if (currChar == 'b')
+//      {
+//        analogWrite(left_side_2, 100);
+//        analogWrite(right_side_2, 100);
+//        digitalWrite(left_side,LOW) ;
+//        digitalWrite(right_side,LOW) ;
+//        delay(3000)
+//      }
     }
   }
 }
