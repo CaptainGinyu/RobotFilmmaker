@@ -1,5 +1,10 @@
 #include <Servo.h>
 
+const int trigPin = 43;
+const int echoPin = 39;
+long duration;
+float distance;
+
 const int motorPin1 = 10;
 const int motorPin2 = 5;
 
@@ -13,6 +18,9 @@ int commaLocation;
 
 void setup()
 {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  
   pinMode(motorPin1, OUTPUT);
   pinMode(motorPin2, OUTPUT);
   motor1.attach(motorPin1);
@@ -27,7 +35,7 @@ void setup()
   Serial.begin(9600);
 }
 
-void loop()
+void handleServos()
 {
   if (Serial.available())
   {
@@ -73,4 +81,23 @@ void loop()
       }
     }
   }
+}
+
+void handleUltrasonic()
+{
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration * (0.034 / 2.0);
+  Serial.println(distance); 
+}
+void loop()
+{
+  handleServos();
+  handleUltrasonic();
 }
