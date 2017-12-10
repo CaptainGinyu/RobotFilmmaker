@@ -18,14 +18,14 @@ def tracking():
     from cv2 import face
     from mosse import MOSSE
 
-    # arduinoSerial = serial.Serial('/dev/cu.usbmodem1421', 9600)
-    # fourcc = cv2.VideoWriter_fourcc(*'MP42')
-    # out = cv2.VideoWriter('output.mp4', fourcc, 20.0, (1280,960))
     ###################################################################
     # PARAMETERS
     ###################################################################
     # Arduino connection
-    arduinoSerial = serial.Serial('COM3', 9600)
+    arduinoSerial = serial.Serial('/dev/ttyACM1', 9600)
+
+    # Video writer for Raspberry Pi Only
+    fourcc = cv2.VideoWriter_fourcc(*'MJPG')
 
     # General parameters
     VIDEO_FILE = 'output.avi'  # Video output file name
@@ -34,9 +34,9 @@ def tracking():
     KEY_BREAK = 27  # Key to stop program (27 = escape)
 
     # Tracking parameters
-    TIMER_FACE = 7.5  # Face detection reset every x seconds
-    TIMER_SERVO = 1.0  # Servo movement every x seconds
-    TIMER_FIREBASE = 2  # Firebase messaging every x seconds
+    TIMER_FACE = 10  # Face detection reset every x seconds
+    TIMER_SERVO = 2.0  # Servo movement every x seconds
+    TIMER_FIREBASE = 5  # Firebase messaging every x seconds
     MOVE_DIFF_X = 35  # Servo moves if x-axis difference between center of face and frame is greater than this
     MOVE_DIFF_Y = 30  # Servo moves if y-axis difference between center of face and frame is greater than this
 
@@ -119,18 +119,20 @@ def tracking():
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
     (im_width, im_height) = (125, 125)
 
-    # Start webcam and video writer.  Allow warmup
+    # Start webcam, allow warmup, and make sure webcam is reading
     webcam = cv2.VideoCapture(WEBCAM_PORT)
-    out = cv2.VideoWriter(VIDEO_FILE, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 20,
-                          (int(webcam.get(3)), int(webcam.get(4))))
     time.sleep(1)
-
-    # Keep reading until webcam gets something
     (rval, frame) = webcam.read()
     while frame is None:
         webcam.release()
         webcam = cv2.VideoCapture(WEBCAM_PORT)
         (rval, frame) = webcam.read()
+
+    # Start video writer
+    # Laptop out:
+    # out = cv2.VideoWriter(VIDEO_FILE,cv2.VideoWriter_fourcc('M','J','P','G'), 20, (int(webcam.get(3)),int(webcam.get(4))))
+    # Raspberry Pi out:
+    out = cv2.VideoWriter(VIDEO_FILE, fourcc, 20.0, (640, 480))
 
     # Start counting time and frames
     t_start = time.time()
@@ -143,6 +145,10 @@ def tracking():
         (rval, frame) = webcam.read()
         frame = cv2.flip(frame, 1, 0)
         out.write(frame)
+
+        # Show frame
+        cv2.imshow('Test', frame)
+        cv2.waitKey(10)
 
         # Calculations
         n_frames = n_frames + 1  # Increment frame count for FPS calculations
@@ -164,21 +170,16 @@ def tracking():
             (dirX, dirY) = ("", "")
 
             # Write the name of recognized face
-            name = names[prediction[0]]
+            # name = names[prediction[0]]
             if prediction[1] < 3000:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
-                cv2.putText(frame, '%s - %.0f' % (name, prediction[1]), (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN, 1,
-                            (0, 255, 0))
-                label.append(name)
+                # cv2.putText(frame, '%s - %.0f' % (name, prediction[1]), (x - 10, y - 10), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0))
+                # label.append(name)
                 target = 1
                 print("FOUND!")
 
             else:
                 target = 0
-
-            # Show frame
-            cv2.imshow('Test', frame)
-            cv2.waitKey(10)
 
     ###################################################################
     # FACE FOUND.  GO TO MAIN LOOP
@@ -277,19 +278,19 @@ def tracking():
             if numpy.abs(movement[0]) > MOVE_DIFF_X or numpy.abs(movement[1]) > MOVE_DIFF_Y:
                 if movement[0] > 0:
                     dirX = "East"
-                    arduinoSerial.write(bytes('r'))
+                    arduinoSerial.write(bytes('r', 'UTF-8'))
                     print ('r')
                 else:
                     dirX = "West"
-                    arduinoSerial.write(bytes('l'))
+                    arduinoSerial.write(bytes('l', 'UTF-8'))
                     print ('l')
                 if movement[1] > 0:
                     dirY = "North"
-                    arduinoSerial.write(bytes('u'))
+                    arduinoSerial.write(bytes('u', 'UTF-8'))
                     print ('u')
                 else:
                     dirY = "South"
-                    arduinoSerial.write(bytes('d'))
+                    arduinoSerial.write(bytes('d', 'UTF-8'))
                     print ('d')
                     # if numpy.abs(length_face) < height/3 or numpy.abs(width_face) < width/3:
                     #     arduinoSerial.write(bytes('f'))

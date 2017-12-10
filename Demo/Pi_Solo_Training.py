@@ -3,6 +3,7 @@
 # This is the training module for RobotFilmmaker
 # Takes mugshots, uploads them to AWS buckets, and does training to generate an XML in a bucket
 
+
 ###################################################################
 # IMPORT
 ###################################################################
@@ -43,7 +44,7 @@ if not os.path.exists(folder):
 # We load the xml file
 classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 size = 4
-
+    
 ###################################################################
 # ALLOW WEBCAM WARMUP AND MAKE SURE WEBCAM IS READY
 ###################################################################
@@ -53,7 +54,7 @@ while im is None:
     webcam.release()
     webcam = cv2.VideoCapture(WEBCAM_PORT)
     (rval, im) = webcam.read()
-
+    
 ###################################################################
 # RUN MUGSHOTS UNTIL BREAK
 ###################################################################
@@ -61,6 +62,7 @@ while True:
     (rval, im) = webcam.read()                                                  # Read frame
     im = cv2.flip(im, 1, 0)                                                     # Flip to act as a mirror
     mini = cv2.resize(im, (int(im.shape[1] / size), int(im.shape[0] / size)))   # Resize the image to speed up detection
+
 
     # Detect MultiScale / faces
     faces = classifier.detectMultiScale(mini)
