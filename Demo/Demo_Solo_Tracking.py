@@ -24,16 +24,16 @@ from mosse import MOSSE
 # PARAMETERS
 ###################################################################
 # Arduino connection
-arduinoSerial = serial.Serial('COM3', 9600)
+#arduinoSerial = serial.Serial('COM3', 9600)
 
 # General parameters
 VIDEO_FILE = 'output.avi'   # Video output file name
-WEBCAM_PORT = 1             # Webcam port
+WEBCAM_PORT = 0             # Webcam port
 XML_FILE = 'trained.xml'    # XML file name
 KEY_BREAK = 27              # Key to stop program (27 = escape)
 
 # Tracking parameters
-TIMER_FACE = 7.5        # Face detection reset every x seconds
+TIMER_FACE = 5.5        # Face detection reset every x seconds
 TIMER_SERVO = 1.0       # Servo movement every x seconds
 TIMER_FIREBASE = 2      # Firebase messaging every x seconds
 MOVE_DIFF_X = 35        # Servo moves if x-axis difference between center of face and frame is greater than this
@@ -174,9 +174,9 @@ while target == 0:
         else:
             target = 0
 
-        # Show frame
-        cv2.imshow('Test', frame)
-        cv2.waitKey(10)
+    # Show frame
+    cv2.imshow('Test', frame)
+    cv2.waitKey(10)
 
 ###################################################################
 # FACE FOUND.  GO TO MAIN LOOP
@@ -274,19 +274,19 @@ while 1:
         if numpy.abs(movement[0]) > MOVE_DIFF_X or numpy.abs(movement[1]) > MOVE_DIFF_Y:
             if movement[0] > 0:
                 dirX = "East"
-                arduinoSerial.write(bytes('r'))
+                #arduinoSerial.write(bytes('r'))
                 print ('r')
             else:
                 dirX = "West"
-                arduinoSerial.write(bytes('l'))
+                #arduinoSerial.write(bytes('l'))
                 print ('l')
             if movement[1] > 0:
                 dirY = "North"
-                arduinoSerial.write(bytes('u'))
+                #arduinoSerial.write(bytes('u'))
                 print ('u')
             else:
                 dirY = "South"
-                arduinoSerial.write(bytes('d'))
+                #arduinoSerial.write(bytes('d'))
                 print ('d')
         # if numpy.abs(length_face) < height/3 or numpy.abs(width_face) < width/3:
         #     arduinoSerial.write(bytes('f'))

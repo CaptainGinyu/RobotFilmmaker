@@ -16,7 +16,7 @@ def training():
     # PARAMETERS
     ###################################################################
     WEBCAM_PORT = 1  # Webcam port
-    N_SAMPLES = 40  # Number of sample mugshots to take
+    N_SAMPLES = 30  # Number of sample mugshots to take
     KEY_BREAK = 27  # Break key (27 = escape)
     UPLOAD_KEVIN = 0  # Upload the nontarget, Kevin :)
     FOLDER_TARGET = '/Faces/Target'  # Folder for storing mugshots (relative to current directory)

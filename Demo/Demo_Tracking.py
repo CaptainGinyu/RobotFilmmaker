@@ -25,7 +25,8 @@ def tracking():
     # PARAMETERS
     ###################################################################
     # Arduino connection
-    arduinoSerial = serial.Serial('COM3', 9600)
+    ARDUINO_PORT = 'COM3'
+    arduinoSerial = serial.Serial(ARDUINO_PORT, 9600)
 
     # General parameters
     VIDEO_FILE = 'output.avi'  # Video output file name
@@ -34,11 +35,12 @@ def tracking():
     KEY_BREAK = 27  # Key to stop program (27 = escape)
 
     # Tracking parameters
-    TIMER_FACE = 7.5  # Face detection reset every x seconds
+    TIMER_FACE = 5.0  # Face detection reset every x seconds
     TIMER_SERVO = 1.0  # Servo movement every x seconds
+    TIMER_FORWARD = 5.0  # Robot movement forward and backwards every x seconds
     TIMER_FIREBASE = 2  # Firebase messaging every x seconds
-    MOVE_DIFF_X = 35  # Servo moves if x-axis difference between center of face and frame is greater than this
-    MOVE_DIFF_Y = 30  # Servo moves if y-axis difference between center of face and frame is greater than this
+    MOVE_DIFF_X = 45  # Servo moves if x-axis difference between center of face and frame is greater than this (35 default)
+    MOVE_DIFF_Y = 40  # Servo moves if y-axis difference between center of face and frame is greater than this (30 default)
 
     # AWS parameters
     # AWS_CREDS should be a text file with two lines: first line is access key, seconds line is secret key
@@ -173,12 +175,20 @@ def tracking():
                 target = 1
                 print("FOUND!")
 
+                # Save the box as face detection specific
+                w_detect = w
+                h_detect = h
+                w_mosse = w_detect
+                h_mosse = h_detect
+                length_face = w_detect
+                width_face = h_detect
+
             else:
                 target = 0
 
-            # Show frame
-            cv2.imshow('Test', frame)
-            cv2.waitKey(10)
+        # Show frame
+        cv2.imshow('Test', frame)
+        cv2.waitKey(10)
 
     ###################################################################
     # FACE FOUND.  GO TO MAIN LOOP
@@ -190,6 +200,7 @@ def tracking():
     t0 = time.time()  # Start timer for face detection
     servo_t0 = t0  # Start timer for servo movement
     firebase_t0 = t0  # Start timer for firebase
+    forward_t0 = t0     # Start timer for forward/backward
 
     # Initial face is found so forever loop
     while 1:
@@ -197,10 +208,12 @@ def tracking():
         t1 = time.time()
         servo_t1 = t1
         firebase_t1 = t1
+        forward_t1 = t1
 
         tdiff = t1 - t0
         servo_tdiff = servo_t1 - servo_t0
         firebase_tdiff = firebase_t1 - firebase_t0
+        forward_tdiff = forward_t1 - forward_t0
 
         # Read frame, flip, and output to video
         (rval, frame) = webcam.read()
@@ -243,6 +256,14 @@ def tracking():
                     target = 1
                     tracker.newface(gray, [x, y, x + w, y + h])
 
+                    # Save the box as face specific and update MOSSE
+                    w_detect = w
+                    h_detect = h
+                    w_mosse = w_detect
+                    h_mosse = h_detect
+                    length_face = w_detect
+                    width_face = h_detect
+
                 else:
                     target = 0
 
@@ -253,25 +274,49 @@ def tracking():
             draw_x1, draw_y1, draw_x2, draw_y2 = int(draw_x - 0.5 * draw_w), int(draw_y - 0.5 * draw_h), int(
                 draw_x + 0.5 * draw_w), int(draw_y + 0.5 * draw_h)
 
+            # Save coordinates
             x = draw_x1
             y = draw_y1
             w = draw_x2 - draw_x1
             h = draw_y2 - draw_y1
 
+            # Save coordinates for tracking
+            w_mosse = w
+            h_mosse = h
+
             # Original MOSSE rectangle is:
             # cv2.rectangle(frame, (draw_x1, draw_y1), (draw_x2, draw_y2), (0, 0, 255), 3)
             cv2.rectangle(frame, (x, y), (draw_x2, draw_y2), (0, 0, 255), 3)
 
+        # 4. If forward timer is up and face detected, move the car forward/backward
+        if forward_tdiff > TIMER_FORWARD and target == 1:
+            print("Moving cart")
+            forward_t0 = time.time()    # Reset timer
+
+            # The closer you are, the bigger the box is
+            print(length_face)
+            print(height/3)
+            print(width_face)
+            print(width/3)
+            #print("length: " + length_face + "vs. height/3: " + height/3)
+            #print("width: " + width_face + "width/3: "+ width/ 3)
+            if numpy.abs(length_face) < height/6 or numpy.abs(width_face) < width/6:
+                arduinoSerial.write(bytes('f'))
+                print ('f')
+            if numpy.abs(length_face) > height/3 or numpy.abs(width_face) > width/3:
+                arduinoSerial.write(bytes('b'))
+                print ('b')
+
         # 3. If servo timer is up and face detected, move the servo
-        if servo_tdiff > TIMER_SERVO and target == 1:
+        elif servo_tdiff > TIMER_SERVO and target == 1:
             print("Moving servo")
             servo_t0 = time.time()  # Reset timer
 
             # Calculate center difference
             center = numpy.array([x + (w / 2), y + (h / 2)])
             movement = desired_center - center
-            length_face = x + w;
-            width_face = y + h;
+            #length_face = w_mosse
+            #width_face = h_mosse
 
             # Move servo based if face is off center by some amount
             if numpy.abs(movement[0]) > MOVE_DIFF_X or numpy.abs(movement[1]) > MOVE_DIFF_Y:
@@ -291,15 +336,20 @@ def tracking():
                     dirY = "South"
                     arduinoSerial.write(bytes('d'))
                     print ('d')
-                    # if numpy.abs(length_face) < height/3 or numpy.abs(width_face) < width/3:
-                    #     arduinoSerial.write(bytes('f'))
-                    #     print ('f')
-                    #
-                    # if numpy.abs(length_face) > height/3 or numpy.abs(width_face) > width/3:
-                    #     arduinoSerial.write(bytes('b'))
-                    #     print ('b')
+            '''
+            # If the face takes up less than 33% of the frame, move forward
+            if numpy.abs(length_face) < height/3 or numpy.abs(width_face) < width/3:
+                arduinoSerial.write(bytes('f'))
+                print ('f')
 
-        # 4. Check firebase for status
+            # If the face takes up greater than 66% of the frame, move backward
+            if numpy.abs(length_face) > 2*height/3 or numpy.abs(width_face) > 2*width/3:
+                arduinoSerial.write(bytes('b'))
+                print ('b')
+            '''
+
+
+        # 5. Check firebase for status
         if firebase_tdiff > TIMER_FIREBASE:
             print("Retrieving Firebase")
             firebase_t0 = time.time()  # Reset timer
@@ -315,6 +365,10 @@ def tracking():
                 target = 0
                 db.child("Status").set("Tracking Started")
 
+                # Reset port
+                #arduinoSerial.close()
+                #arduinoSerial = serial.Serial(ARDUINO_PORT, 9600)
+
         # 5. Show frame
         cv2.imshow('Test', frame)
 
@@ -325,6 +379,7 @@ def tracking():
             break
 
     # Save video and cleanup
+    arduinoSerial.close()
     out.release()
     cv2.destroyAllWindows()
     webcam.release()
