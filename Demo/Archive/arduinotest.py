@@ -1,0 +1,21 @@
+import serial
+arduinoSerial = serial.Serial('/dev/cu.usbmodem1411', 9600)
+
+
+arduinoSerial.write(bytes("robot30,0", 'UTF-8'))
+print ('30,0')
+# arduinoSerial.write(bytes("0,0#1", 'UTF-8'))
+# arduinoSerial.write(bytes("30,0#0", 'UTF-8'))
+# print ('30,0')
+    # arduinoSerial.write(bytes("-30,0#0", 'UTF-8'))
+    # print ('-30,0')
+    # arduinoSerial.write(bytes("30,0#0", 'UTF-8'))
+    # print ('30,0')
+    # arduinoSerial.write(bytes("0,30#0", 'UTF-8'))
+    # print ('0,30')
+    # arduinoSerial.write(bytes("0,-30#0", 'UTF-8'))
+    # print ('0,-30')
+    # arduinoSerial.write(bytes("0,-30#0", 'UTF-8'))
+    # print ('0,-30')
+    # arduinoSerial.write(bytes("0,30#0", 'UTF-8'))
+    # print ('0,30')
