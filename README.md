@@ -2,18 +2,17 @@
 Philip Yuan, Harshil Prajapati, Kevin Chow, Nikhil Ranjan
 
 ## Product Description
-For people who wish to film themselves in a non-selfie fashion, Robot Filmmaker is a robotic system that will track and record videos of a given person or object.  Unlike video drones, our product will reduce the need of human control during the filming process so that the person being filmed can focus on the task they want recorded and not the recording process itself!
+Robot Filmmaker is a system that will automatically track and record videos of the user to reduce the need of human control during the filming process so users can focus on content rather than the recording process.
 
 ## User Stories
 **As a user I want the device to…**
-  - Recognize me against other random people/objects
-  - Follow me as I move so that I am always in view
-  - Save my video to flash drive / cloud
-  - Be portable and convenient to use
+  -Recognize the user against other random people or objects.
+  -Follow the user to always keep the user in frame.
+  -Save the user’s video.
+  -Be portable and convenient to use.
   
 **As a user it would be nice if the device could...**
-  - Film me in many different ways
-  - Such as left frame only, fixed distance, etc.
+  - Film user in many different ways (Such as left frame only, fixed distance, etc.)
   - Recognize and follow other objects like a ball or dog
 
 ## System Description
