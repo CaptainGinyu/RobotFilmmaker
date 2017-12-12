@@ -49,7 +49,7 @@ Robot Filmmaker is a system that will automatically track and record videos of t
   - **Examples + Tutorials:** Example code and tutorials of how we wrote and set up cloud management
   - **RobotFilmmakerAndroidApp:** Android application code
   - **ServosController:** Arduino code for robot control
-  - Test Report.pdf: Report on unit testing scenarios and their results
+  - **Test Report.pdf:** Report on unit testing scenarios and their results
   
  ## Poster
  ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/Poster.png)
