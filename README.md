@@ -40,3 +40,6 @@ For people who wish to film themselves in a non-selfie fashion, Robot Filmmaker 
     - haarcascade_frontalface_default.xml: OpenCV provided XML file used for face feature detection    
   - **Examples + Tutorials:** Example code and tutorials of how we wrote and set up cloud management
   - **ServosController:** Arduino code for robot control
+  
+ ## Poster
+ ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/Poster.png)
