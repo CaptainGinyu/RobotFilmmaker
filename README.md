@@ -31,6 +31,8 @@ For people who wish to film themselves in a non-selfie fashion, Robot Filmmaker 
   - Android Studio (https://developer.android.com/studio/index.html)
   - Amazon Web Services (https://aws.amazon.com)
   
+  There should also be an adminuser.txt file with two lines: first line is access key, seconds line is secret key in order to run the training code on the cloud Linux servers.
+  
 ### System Diagram
 ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/System_Diagram.png)
 
@@ -44,8 +46,11 @@ For people who wish to film themselves in a non-selfie fashion, Robot Filmmaker 
     - mosse.py and associated files: MOSSE tracking functions used in Demo_Training.py
     - Demo_Solo_Training.py, Demo_Solo_Tracking.py: Training and tracking scripts modified as solo runnable scripts that aren't callable functions.
     - haarcascade_frontalface_default.xml: OpenCV provided XML file used for face feature detection    
+  - **Readme Resources:** Pictures for Github readme
   - **Examples + Tutorials:** Example code and tutorials of how we wrote and set up cloud management
+  - **RobotFilmmakerAndroidApp:** Android application code
   - **ServosController:** Arduino code for robot control
+  - Test Report.pdf: Report on unit testing scenarios and their results
   
  ## Poster
  ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/Poster.png)
