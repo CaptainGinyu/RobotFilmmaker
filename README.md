@@ -24,12 +24,12 @@ For people who wish to film themselves in a non-selfie fashion, Robot Filmmaker 
   - UniHobby 4WD Robot Chassis (http://www.unihobbytech.com/arduino-robot-parts/arduino-robot-chassis-c)
 
 ### Software Requirements
-  - Python 3.6.2
-  - OpenCV 3.0
-  - OpenCV contrib
-  - Arduino 
-  - Android Studio
-  - Amazon Web Services
+  - Python 3.6.2 (https://www.python.org/download/releases/3.0/)
+  - OpenCV 3.0 (https://opencv.org/opencv-3-3.html)
+  - OpenCV contrib (https://github.com/opencv/opencv_contrib)
+  - Arduino (https://www.arduino.cc/en/Main/Software)
+  - Android Studio (https://developer.android.com/studio/index.html)
+  - Amazon Web Services (https://aws.amazon.com)
   
 ### System Diagram
 ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/System_Diagram.png)
