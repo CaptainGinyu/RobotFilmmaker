@@ -25,7 +25,7 @@ For people who wish to film themselves in a non-selfie fashion, Robot Filmmaker 
   - Servos, Linear Actuator, Cart
   
 ### System Diagram
-![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/SYSTEM DIAGRAM WHITE.PNG)
+![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/System_Diagram.png)
 
 ## Repository Description
   - **Archives:** Archive of backups and unused code and pictures
