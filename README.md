@@ -30,9 +30,12 @@ For people who wish to film themselves in a non-selfie fashion, Robot Filmmaker 
 ## Repository Description
   - **Archives:** Archive of backups and unused code and pictures
   - **Demo:** Demo-ready code
-    - COMBINED-Train1-Mugshots.py:
-      1/2 of Training. Takes streaming video and saves mugshots of target's face
-    - COMBINED-Train2-UploadTrain.py: 2/2 of Training. Uploads mugshots of target to S3 buckets, executes training to generate xml file of model in another S3 bucket.  AWS credentials needed to run this.
-    - COMBINED-Track.py: 1/1 of Tracking. Downloads xml model from S3 bucket. Does tracking
+    - Demo_Main.py: Main function.  Forever loop that reads commands from the Android phone app.
+    - Demo_Training.py: Training function called in Demo_Main.py when Android phone app sends command to start training.  Starts  mugshots to get face samples, then sends samples to S3 bucket and does training on cloud.  Leaves an XML model file on the cloud.
+    - Demo_Tracking.py: Tracking function called in Demo_Main.py when Android phone app sends command to start tracking. Downloads xml model from S3 bucket.  Continually detects face, sends commands to Arduino, and listens for commands from phone app.
+    - mosse.py and associated files: MOSSE tracking functions used in Demo_Training.py
+    - Demo_Solo_Training.py, Demo_Solo_Tracking.py: Training and tracking scripts modified as solo runnable scripts that aren't callable functions.
+    - haarcascade_frontalface_default.xml: OpenCV provided XML file used for face feature detection
+     
   - **Examples + Tutorials:** Example code and tutorials of how we wrote and set up cloud management
   
