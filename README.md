@@ -6,10 +6,10 @@ Robot Filmmaker is a system that will automatically track and record videos of t
 
 ## User Stories
 **As a user I want the device to…**
-  -Recognize the user against other random people or objects.
-  -Follow the user to always keep the user in frame.
-  -Save the user’s video.
-  -Be portable and convenient to use.
+  - Recognize the user against other random people or objects.
+  - Follow the user to always keep the user in frame.
+  - Save the user’s video.
+  - Be portable and convenient to use.
   
 **As a user it would be nice if the device could...**
   - Film user in many different ways (Such as left frame only, fixed distance, etc.)
