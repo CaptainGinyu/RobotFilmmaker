@@ -17,13 +17,19 @@ For people who wish to film themselves in a non-selfie fashion, Robot Filmmaker 
   - Recognize and follow other objects like a ball or dog
 
 ## System Description
-### Hardware and Software Requirements
+### Hardware Requirements
+  - Arduino Mega 2560 (https://www.arduino.cc/en/Main/arduinoBoardMega2560/)
+  - Pan Tilt Kit and Servos (https://www.servocity.com/spt100#324=38)
+  - Logitech C270 Webcam (https://www.logitech.com/en-us/product/hd-webcam-c270)
+  - UniHobby 4WD Robot Chassis (http://www.unihobbytech.com/arduino-robot-parts/arduino-robot-chassis-c)
+
+### Software Requirements
+  - Python 3.6.2
+  - OpenCV 3.0
+  - OpenCV contrib
+  - Arduino 
   - Android Studio
   - Amazon Web Services
-  - Arduino Mega 2560
-  - Pan Tilt Kit and Servos
-  - Logitech C270 Webcam
-  - UniHobby 4WD Robot Chassis
   
 ### System Diagram
 ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/System_Diagram.png)
