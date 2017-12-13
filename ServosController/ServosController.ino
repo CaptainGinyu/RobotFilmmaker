@@ -30,7 +30,7 @@ void setup()
 
   motor1Angle = 90;
   motor2Angle = 90;
-
+  
   motor1.write(motor1Angle);
   motor2.write(motor2Angle);
 
@@ -68,39 +68,27 @@ void loop()
       char currChar = motorInstructions.charAt(i);
       if (currChar == 'r')
       {
-        for (int j = 0; j < 4; j++)
-        {
-          motor1Angle++;
-          motor1.write(motor1Angle);
-          delay(50);
-        }
+        motor1Angle++;
+        motor1.write(motor1Angle);
+        delay(50);
       }
       if (currChar == 'l')
       {
-        for (int j = 0; j < 4; j++)
-        {
-          motor1Angle--;
-          motor1.write(motor1Angle);
-          delay(50);
-        }
+        motor1Angle--;
+        motor1.write(motor1Angle);
+        delay(50);
       }
       if (currChar == 'u')
       {
-        for (int j = 0; j < 4; j++)
-        {
-          motor2Angle++;
-          motor2.write(motor2Angle);
-          delay(50);
-        }
+        motor2Angle++;
+        motor2.write(motor2Angle);
+        delay(50);
       }
       if (currChar == 'd')
       {
-        for (int j = 0; j < 4; j++)
-        {
-          motor2Angle--;
-          motor2.write(motor2Angle);
-          delay(50);
-        }
+        motor2Angle--;
+        motor2.write(motor2Angle);
+        delay(50);
       }
       if (currChar == 'f')
       {
@@ -120,6 +108,45 @@ void loop()
         digitalWrite(wheelMotorPin4, HIGH);
         timer.setTimeout(interval);
         timer.restart();
+      }
+      if (currChar == 'z')
+      {
+        if (motor1Angle < 90)
+        {
+          while (motor1Angle < 90)
+          {
+            motor1Angle++;
+            motor1.write(motor1Angle);
+            delay(50);
+          }
+        }
+        else if (motor1Angle > 90)
+        {
+          while (motor1Angle > 90)
+          {
+            motor1Angle--;
+            motor1.write(motor1Angle);
+            delay(50);
+          }
+        }
+        if (motor2Angle < 90)
+        {
+          while (motor2Angle < 90)
+          {
+            motor2Angle++;
+            motor2.write(motor2Angle);
+            delay(50);
+          }
+        }
+        else if (motor2Angle > 90)
+        {
+          while (motor2Angle > 90)
+          {
+            motor2Angle--;
+            motor2.write(motor2Angle);
+            delay(50);
+          }
+        }
       }
     }
   }
