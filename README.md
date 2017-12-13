@@ -1,4 +1,4 @@
-# Robot Filmmaker
+# Robot Filmmaker ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/icon.png)
 Philip Yuan, Harshil Prajapati, Kevin Chow, Nikhil Ranjan
 
 ## Product Description
@@ -40,6 +40,10 @@ Robot Filmmaker is a system that will automatically track and record videos of t
 ### System Diagram
 ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/System_Diagram.png)
 
+### Android Application
+ The Robot Filmmaker Android application provides a simple UI for users to wirelessly start the different modes of Training and Tracking as well as provide useful information such as current status and other functions like resetting the camera or resetting the face detection.
+ ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/App.png)
+ 
 ## Repository Description
   - **Archives:** Archive of backups and unused code and pictures
   - **Demo:** Demo-ready code
@@ -58,3 +62,5 @@ Robot Filmmaker is a system that will automatically track and record videos of t
   
  ## Poster
  ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/Poster.png)
+ 
+
