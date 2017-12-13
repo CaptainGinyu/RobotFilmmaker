@@ -54,6 +54,7 @@ Robot Filmmaker is a system that will automatically track and record videos of t
     - Demo_Tracking.py: Tracking function called in Demo_Main.py when Android phone app sends command to start tracking. Downloads xml model from S3 bucket.  Continually detects face, sends commands to Arduino, and listens for commands from phone app.
     - mosse.py and associated files: MOSSE tracking functions used in Demo_Training.py (Taken from the examples of OpenCV   contrib)
     - Demo_Solo_Training.py, Demo_Solo_Tracking.py: Training and tracking scripts modified as solo runnable scripts that aren't callable functions.
+    - Pi_* files: Associated files specifically coded for Raspberry Pi 3 functionality (unused)
     - haarcascade_frontalface_default.xml: OpenCV provided XML file used for face feature detection    
   - **Readme Resources:** Pictures for Github readme
   - **Examples + Tutorials:** Example code and tutorials of how we wrote and set up cloud management
