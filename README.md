@@ -50,7 +50,7 @@ Upon completing the training part for the user, the user's face is effectively '
 ### Android Application
  The Robot Filmmaker Android application provides a simple UI for users to wirelessly start the different modes of Training and Tracking as well as provide useful information such as current status and other functions like resetting the camera or resetting the face detection.
  
- ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/and1-1.png)![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/and1-2.png)![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/and1-3.png)
+ ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/and1-2.png)![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/and1-1.png)![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/and1-3.png)
  
 ## Repository Description
   - **Archives:** Archive of backups and unused code and pictures
