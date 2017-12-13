@@ -1,4 +1,4 @@
-package com.example.nikh.firebaseauth;
+package com.example.nikh.robotfilmmaker;
 
 import org.junit.Test;
 
