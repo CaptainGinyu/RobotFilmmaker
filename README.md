@@ -1,4 +1,4 @@
-# ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/icon_small.png)Robot Filmmaker 
+# ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/icon_small.png)  Robot Filmmaker 
 Philip Yuan, Harshil Prajapati, Kevin Chow, Nikhil Ranjan
 
 ## Product Description
