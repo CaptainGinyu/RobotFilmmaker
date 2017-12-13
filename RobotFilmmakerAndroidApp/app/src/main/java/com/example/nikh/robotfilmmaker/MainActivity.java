@@ -1,5 +1,6 @@
 package com.example.nikh.robotfilmmaker;
 
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -99,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 status.setValue("Tracking Completed");
             }
-
         }
 
         if (view == buttonResetCamera) {

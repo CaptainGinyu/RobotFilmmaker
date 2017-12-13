@@ -148,6 +148,13 @@ void loop()
           }
         }
       }
+      if (currChar == 's')
+      {
+        digitalWrite(wheelMotorPin1, LOW);
+        digitalWrite(wheelMotorPin2, LOW);
+        digitalWrite(wheelMotorPin3, LOW);
+        digitalWrite(wheelMotorPin4, LOW);
+      }
     }
   }
 }
