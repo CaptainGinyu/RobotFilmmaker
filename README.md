@@ -69,6 +69,13 @@ Upon completing the training part for the user, the user's face is effectively '
   - **ServosController:** Arduino code for robot control
   - **Test Report.pdf:** Report on unit testing scenarios and their results
   
+ ## Future Work
+ - More fluid robot movement
+ - Expand cloud functionality to include multiple user profiles
+ - Utilize a more compact but powerful processing unit
+ - Develop algorithm to detect other objects
+ - Record sound
+  
  ## Poster
  ![alt tag](https://github.com/CaptainGinyu/RobotFilmmaker/blob/master/Readme%20Resources/Poster.png)
  
