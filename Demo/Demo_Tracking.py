@@ -56,7 +56,7 @@ def tracking():
     MOVE_DIFF_Y_UNIT = 40
     UNIT_DEG_X = 25         # Each UNIT_DEG_X or UNIT_DEG_Y x or y-axis difference, the robot will move 1 degrees
     UNIT_DEG_Y = 25
-    DEG_MAX = 2             # Max degrees to move the servo
+    DEG_MAX = 3             # Max degrees to move the servo
 
     # AWS parameters
     # AWS_CREDS should be a text file with two lines: first line is access key, seconds line is secret key
@@ -304,6 +304,9 @@ def tracking():
         if servo_tdiff > TIMER_SERVO and target == 1:
             print("Moving servo")
             servo_t0 = time.time()  # Reset timer
+
+            # Stop cart just in case
+            arduinoSerial.write(bytes('s'))
 
             # Do cart if cart's turn is up
             if cart_n >= CART_COUNTER:
