@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+# MOSSE tracker taken from openCV examples
+# Credit due to their respective authors
 
 '''
 Video capture sample.

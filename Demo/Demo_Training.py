@@ -3,6 +3,7 @@
 # This is the training module for RobotFilmmaker
 # Takes mugshots, uploads them to AWS buckets, and does training to generate an XML in a bucket
 
+
 def training():
     ###################################################################
     # IMPORT
