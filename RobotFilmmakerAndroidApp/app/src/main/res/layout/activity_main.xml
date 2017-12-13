@@ -1,66 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.nikh.firebaseauth.MainActivity">
+    android:background="#7aa2ff"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/imageViewRobotfilmmaker"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_margin="8dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/icon"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/status"
         android:layout_width="match_parent"
+        android:gravity="center_horizontal"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="16dp">
+        android:textSize="20dp"
+        android:text=""
+        android:textColor="#3d3d3d"
+        android:layout_margin="16dp"
+        android:layout_below="@id/imageViewRobotfilmmaker" />
 
-
-        <TextView
-            android:id="@+id/textViewUserRegistration"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:text="User Registration"
-            android:textAlignment="center"
-            android:textSize="18sp" />
-
-        <EditText
-            android:layout_margin="15dp"
-            android:id="@+id/editTextEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your email"
-            android:inputType="textEmailAddress"
-            android:text="Enter your email" />
-
-        <EditText
-            android:layout_margin="15dp"
-            android:id="@+id/editTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your Password"
-            android:inputType="textPassword"
-            android:text="Enter your password" />
-
+            android:layout_height="match_parent"
+            android:layout_below="@id/status"
+            android:background="#7aa2ff"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
         <Button
-            android:layout_margin="15dp"
-            android:id="@+id/buttonRegister"
-            android:layout_width="match_parent"
+            android:id="@+id/buttonTraining"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Register User" />
+            android:layout_margin="8dp"
+            android:text="Start Training"
+            android:fontFamily="@font/cantata_one"
+            android:background="@drawable/fancy_button"
+            android:visibility="visible"
+            android:padding="16dp"
+            android:textColor="#98000b"
+            android:textSize="18dp"
+            android:layout_alignParentTop="true" />
 
-        <TextView
-            android:id="@+id/TextViewSignIn"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/buttonTesting"
+            android:layout_below="@id/buttonTraining"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginStart="24dp"
-            android:textAlignment="center"
-            android:text="Already Registered Sign In Here" />
+            android:layout_margin="8dp"
+            android:text="Start Tracking"
+            android:fontFamily="@font/cantata_one"
+            android:background="@drawable/fancy_button"
+            android:visibility="visible"
+            android:padding="16dp"
+            android:textColor="#98000b"
+            android:textSize="18dp" />
 
+        <Button
+            android:id="@+id/buttonResetCamera"
+            android:layout_below="@id/buttonTesting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Reset Camera"
+            android:fontFamily="@font/cantata_one"
+            android:background="@drawable/fancy_button"
+            android:visibility="gone"
+            android:padding="16dp"
+            android:textColor="#98000b"
+            android:textSize="18dp" />
 
-    </LinearLayout>
-
-
-</android.support.constraint.ConstraintLayout>
+        <Button
+            android:id="@+id/buttonResetTracking"
+            android:layout_below="@id/buttonResetCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Reset Tracking"
+            android:fontFamily="@font/cantata_one"
+            android:background="@drawable/fancy_button"
+            android:visibility="gone"
+            android:padding="16dp"
+            android:textColor="#98000b"
+            android:textSize="18dp" />
+    </RelativeLayout>
+</RelativeLayout>

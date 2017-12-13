@@ -1,8 +1,6 @@
-package com.example.nikh.firebaseauth;
+package com.example.nikh.robotfilmmaker;
 
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by nikh on 11/15/17.

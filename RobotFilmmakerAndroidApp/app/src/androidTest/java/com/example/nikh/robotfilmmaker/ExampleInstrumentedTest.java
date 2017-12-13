@@ -1,4 +1,4 @@
-package com.example.nikh.firebaseauth;
+package com.example.nikh.robotfilmmaker;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
