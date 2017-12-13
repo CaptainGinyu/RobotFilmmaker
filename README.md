@@ -27,7 +27,7 @@ Robot Filmmaker is a system that will automatically track and record videos of t
     - boto3 (pip3 install boto3)
     - botocore (https://pypi.python.org/pypi/botocore)
     - serial (pip3 install pyserial)
-    - pyrebase (pip3 install pyserial)
+    - pyrebase (pip3 install pyrebase)
   - OpenCV 3.0 (https://opencv.org/opencv-3-3.html)
   - OpenCV contrib (https://github.com/opencv/opencv_contrib)
   - Arduino (https://www.arduino.cc/en/Main/Software)
