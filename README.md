@@ -70,7 +70,7 @@ Upon completing the training part for the user, the user's face is effectively '
   - **Test Report.pdf:** Report on unit testing scenarios and their results
  
  ## Final Product
-![Alt Text](https://j.gifs.com/voj0A8.gif)
+![](https://j.gifs.com/voj0A8.gif)
  [Link To Video Of Final Product](https://streamable.com/zb4ei)
  
  ## Future Work
