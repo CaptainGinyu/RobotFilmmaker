@@ -70,7 +70,7 @@ Upon completing the training part for the user, the user's face is effectively '
   - **Test Report.pdf:** Report on unit testing scenarios and their results
  
  ## Final Product
- ![alt tag](https://gfycat.com/ScalyBarrenGrosbeak)
+ ![alt text](https://gfycat.com/ScalyBarrenGrosbeak)
  
  ## Future Work
  - More fluid robot movement
