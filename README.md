@@ -68,7 +68,10 @@ Upon completing the training part for the user, the user's face is effectively '
   - **RobotFilmmakerAndroidApp:** Android application code
   - **ServosController:** Arduino code for robot control
   - **Test Report.pdf:** Report on unit testing scenarios and their results
-  
+ 
+ ## Final Product
+ ![alt tag](https://gfycat.com/ScalyBarrenGrosbeak)
+ 
  ## Future Work
  - More fluid robot movement
  - Expand cloud functionality to include multiple user profiles
